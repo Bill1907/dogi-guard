@@ -1,0 +1,10 @@
+{
+  "greeting": "Hello",
+  "welcome": "Welcome to Dogi Guard",
+  "language": {
+    "current": "Current Language",
+    "english": "English",
+    "korean": "Korean",
+    "switchTo": "Switch to {{language}}"
+  }
+}

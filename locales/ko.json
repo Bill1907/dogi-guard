@@ -1,0 +1,10 @@
+{
+  "greeting": "안녕하세요",
+  "welcome": "도기 가드에 오신 것을 환영합니다",
+  "language": {
+    "current": "현재 언어",
+    "english": "영어",
+    "korean": "한국어",
+    "switchTo": "{{language}}로 변경"
+  }
+}
