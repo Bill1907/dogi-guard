@@ -6,5 +6,141 @@
     "english": "English",
     "korean": "Korean",
     "switchTo": "Switch to {{language}}"
+  },
+  "header": {
+    "title": "My Dogs",
+    "addProfile": "Add Dog"
+  },
+  "dogProfile": {
+    "years": "{{age}} years",
+    "yearsOld": "{{age}} years old",
+    "weight": "{{weight}}kg",
+    "currentMedications": "Current Medications",
+    "noMedications": "No medications",
+    "swipeHint": "Swipe to see more dogs"
+  },
+  "medication": {
+    "heartworm": "Heartworm Prevention",
+    "nextDose": "Next dose",
+    "lastDose": "Last dose",
+    "dDay": "D-{{days}}",
+    "dDayToday": "D-Day",
+    "dDayOverdue": "D+{{days}}",
+    "medicationName": "Medication",
+    "status": {
+      "safe": "On schedule",
+      "soon": "Coming soon",
+      "urgent": "Urgent",
+      "overdue": "Overdue!"
+    }
+  },
+  "empty": {
+    "welcome": "Welcome to Dogi Guard!",
+    "noDogs": "No dogs registered yet",
+    "addFirst": "Add your first dog profile",
+    "getStarted": "Let's get started by creating your first dog profile to track their health and medications.",
+    "addFirstDog": "Add My First Dog",
+    "hint": "Tap the + button in the header to add more dogs later",
+    "features": {
+      "medication": "Track medications and schedules",
+      "schedule": "Never miss heartworm prevention",
+      "health": "Monitor your dog's health data"
+    }
+  },
+  "loading": "Loading...",
+  "errors": {
+    "loadingFailed": "Failed to load dogs",
+    "savingFailed": "Failed to save dog",
+    "deletingFailed": "Failed to delete dog",
+    "updateFailed": "Failed to update dog",
+    "unexpectedError": "An unexpected error occurred"
+  },
+  "actions": {
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "add": "Add",
+    "ok": "OK",
+    "done": "Done",
+    "stay": "Stay",
+    "discard": "Discard"
+  },
+  "form": {
+    "addDog": "Add Dog Profile",
+    "editDog": "Edit Dog Profile",
+    "dogName": "Dog Name",
+    "enterDogName": "Enter dog's name",
+    "dogPhoto": "Dog Photo",
+    "birthDate": "Birth Date",
+    "selectBirthDate": "Select birth date",
+    "weight": "Weight",
+    "enterWeight": "Enter weight",
+    "currentMedications": "Current Medications",
+    "addMedication": "Add medication",
+    "noMedicationsAdded": "No medications added",
+    "heartworkMedicine": "Heartworm Medicine",
+    "enterHeartworkMedicine": "Enter heartworm medicine name",
+    "commonMedicines": "Common medicines",
+    "lastHeartworkDate": "Last Heartworm Dose",
+    "selectLastDate": "Select last dose date",
+    "nextHeartworkDate": "Next Heartworm Dose",
+    "selectNextDate": "Select next dose date",
+    "selectDate": "Select date",
+    "saving": "Saving...",
+    "success": "Success",
+    "dogAddedSuccessfully": "Dog profile added successfully!",
+    "validationError": "Validation Error",
+    "pleaseFixErrors": "Please fix the errors and try again",
+    "unsavedChanges": "Unsaved Changes",
+    "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to leave?"
+  },
+  "photo": {
+    "addPhoto": "Add Photo",
+    "takePhoto": "Take Photo",
+    "chooseFromGallery": "Choose from Gallery",
+    "removePhoto": "Remove Photo",
+    "selectPhoto": "Select Photo",
+    "tapToChange": "Tap to add or change photo",
+    "permissionRequired": "Permission Required",
+    "permissionMessage": "This app needs camera and photo library access to add photos of your dog."
+  },
+  "validation": {
+    "nameRequired": "Dog name is required",
+    "nameTooShort": "Name must be at least 2 characters",
+    "nameTooLong": "Name must be less than 50 characters",
+    "nameInvalidCharacters": "Name can only contain letters, spaces, hyphens, and apostrophes",
+    "photoInvalid": "Invalid photo format",
+    "birthDateRequired": "Birth date is required",
+    "birthDateFuture": "Birth date cannot be in the future",
+    "birthDateTooOld": "Please check the birth date - this seems too old",
+    "weightRequired": "Weight is required",
+    "weightInvalid": "Please enter a valid weight",
+    "weightTooLow": "Weight must be greater than 0",
+    "weightTooHigh": "Weight must be less than 100kg",
+    "heartworkMedicationRequired": "Heartworm medication name is required",
+    "heartworkMedicationTooLong": "Medication name is too long",
+    "lastDateRequired": "Last dose date is required",
+    "nextDateRequired": "Next dose date is required",
+    "lastDateFuture": "Last dose date cannot be in the future",
+    "lastDateTooOld": "Last dose date seems too old - please check",
+    "nextDatePast": "Next dose date should be today or in the future",
+    "nextDateTooFar": "Next dose date is too far in the future",
+    "nextDateBeforeLast": "Next dose date must be after the last dose date",
+    "medicationEmpty": "Medication name cannot be empty",
+    "medicationTooLong": "Medication name is too long",
+    "medicationDuplicate": "Duplicate medication found"
+  },
+  "errors": {
+    "loadingFailed": "Failed to load dogs",
+    "savingFailed": "Failed to save dog",
+    "deletingFailed": "Failed to delete dog",
+    "updateFailed": "Failed to update dog",
+    "unexpectedError": "An unexpected error occurred",
+    "photoError": "Photo Error",
+    "cameraError": "Failed to take photo. Please try again.",
+    "galleryError": "Failed to select photo. Please try again."
   }
 }
