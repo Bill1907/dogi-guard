@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Dog } from '@/types/Dog';
 import { DogInput, DogUpdate } from '@/types/ServiceTypes';
 import DogService from '@/services/DogService';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface UseDogsState {
   dogs: Dog[];
@@ -23,6 +24,7 @@ interface UseDogsActions {
 export interface UseDogsReturn extends UseDogsState, UseDogsActions {}
 
 export const useDogs = (): UseDogsReturn => {
+  const { session } = useAuth();
   const [state, setState] = useState<UseDogsState>({
     dogs: [],
     loading: true,
@@ -113,7 +115,7 @@ export const useDogs = (): UseDogsReturn => {
   const deleteDog = useCallback(async (id: string): Promise<boolean> => {
     try {
       setError(null);
-      const success = await DogService.deleteDog(id);
+      const success = await DogService.deleteDog(id, session);
       
       if (success) {
         // Optimistic update
@@ -128,7 +130,7 @@ export const useDogs = (): UseDogsReturn => {
       await loadDogs();
       return false;
     }
-  }, [loadDogs]);
+  }, [loadDogs, session]);
 
   const getDogById = useCallback((id: string): Dog | undefined => {
     return state.dogs.find(dog => dog.id === id);

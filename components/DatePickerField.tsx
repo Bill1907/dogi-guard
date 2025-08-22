@@ -26,7 +26,7 @@ interface DatePickerFieldProps {
 export const DatePickerField: React.FC<DatePickerFieldProps> = ({
   value,
   onChange,
-  placeholder = 'form.selectDate',
+  placeholder,
   minimumDate,
   maximumDate,
   mode = 'date',
@@ -34,7 +34,7 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
   const { t, locale } = useTranslation();
   const [showPicker, setShowPicker] = useState(false);
 
-  const handleDateChange = (event: any, selectedDate?: Date) => {
+  const handleDateChange = (_event: any, selectedDate?: Date) => {
     // On Android, the event contains the date selection
     if (Platform.OS === 'android') {
       setShowPicker(false);
@@ -53,14 +53,19 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
     setShowPicker(false);
   };
 
-  const displayValue = value ? formatDate(value, locale) : t(placeholder);
+  const displayValue = value ? formatDate(value, locale) : (placeholder || t('form.selectDate'));
   const hasValue = value !== null;
 
+  // Debug logging - 프로덕션에서는 제거 필요
+  if (__DEV__) {
+    console.log('DatePickerField render:', { value, placeholder, displayValue, locale });
+  }
+
   return (
-    <>
-      <TouchableOpacity style={styles.container} onPress={openPicker}>
+    <View>
+      <TouchableOpacity style={styles.container} onPress={openPicker} activeOpacity={0.7}>
         <View style={styles.content}>
-          <Text style={[styles.text, !hasValue && styles.placeholder]}>
+          <Text style={[styles.text, !hasValue && styles.placeholder]} numberOfLines={1}>
             {displayValue}
           </Text>
           <Ionicons name="calendar-outline" size={20} color="#667eea" />
@@ -88,15 +93,20 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
                 </TouchableOpacity>
               </View>
               
-              <DateTimePicker
-                value={value || new Date()}
-                mode={mode}
-                display="spinner"
-                onChange={handleDateChange}
-                minimumDate={minimumDate}
-                maximumDate={maximumDate}
-                style={styles.iosPicker}
-              />
+              <View style={styles.pickerContainer}>
+                <DateTimePicker
+                  value={value || new Date()}
+                  mode={mode}
+                  display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                  onChange={handleDateChange}
+                  minimumDate={minimumDate}
+                  maximumDate={maximumDate}
+                  locale={locale === 'ko' ? 'ko-KR' : 'en-US'}
+                  style={styles.iosPicker}
+                  textColor="#000000"
+                  themeVariant="light"
+                />
+              </View>
             </View>
           </View>
         </Modal>
@@ -111,9 +121,10 @@ export const DatePickerField: React.FC<DatePickerFieldProps> = ({
           onChange={handleDateChange}
           minimumDate={minimumDate}
           maximumDate={maximumDate}
+          locale={locale === 'ko' ? 'ko-KR' : 'en-US'}
         />
       )}
-    </>
+    </View>
   );
 };
 
@@ -124,13 +135,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#fff',
     minHeight: 48,
+    height: 48,
+    justifyContent: 'center',
   },
   content: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    height: '100%',
   },
   text: {
     fontSize: 16,
@@ -151,6 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
+    paddingBottom: 40, // Safe area padding
   },
   modalHeader: {
     flexDirection: 'row',
@@ -167,7 +181,15 @@ const styles = StyleSheet.create({
   doneButton: {
     fontWeight: '600',
   },
+  pickerContainer: {
+    backgroundColor: '#fff',
+    height: 220,
+    width: '100%',
+    justifyContent: 'center',
+  },
   iosPicker: {
-    height: 200,
+    height: 220,
+    backgroundColor: '#fff',
+    width: '100%',
   },
 });

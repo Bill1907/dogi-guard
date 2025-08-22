@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🚨 Important Recent Changes
+
+This project recently underwent major authentication and database improvements:
+- **Environment Variable Handling**: Fixed "supabaseKey is required" startup crash
+- **Clerk-Supabase Integration**: Updated to 2025 native integration (no JWT templates)
+- **Error Handling**: Improved authentication error handling with Korean/English UI
+- **Database Migration**: Automatic migration from local storage to Supabase
+- **RLS Policies**: Fixed Row Level Security integration with Clerk user IDs
+
 ## Development Commands
 
 ### Core Development
@@ -16,11 +25,22 @@ npm run ios      # Start iOS simulator
 npm run android  # Start Android emulator  
 npm run web      # Start web version
 
-# Linting
-npm run lint
+# Linting and Type Checking
+npm run lint        # ESLint checks
+npx tsc --noEmit   # TypeScript type checking
 
 # Reset project to blank state
 npm run reset-project  # Moves starter code to app-example/ and creates blank app/
+```
+
+### Environment Setup
+```bash
+# Copy environment template
+cp .env.example .env
+# Edit .env with your actual credentials:
+# - EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY (from Clerk Dashboard)
+# - EXPO_PUBLIC_SUPABASE_URL (from Supabase Dashboard)
+# - EXPO_PUBLIC_SUPABASE_KEY (new format: sb_publishable_...)
 ```
 
 ### Testing Individual Files
@@ -33,9 +53,12 @@ npx expo start --clear  # Clear cache when debugging
 ## Architecture Overview
 
 ### Project Structure
-- **Expo Router with File-based Routing**: The app uses Expo Router v5.1 for navigation, with routes defined by file structure in the `app/` directory
-- **React Native 0.79.5 with React 19**: Built on the latest React Native with new architecture enabled
-- **TypeScript Configuration**: Strict mode enabled with path alias `@/*` mapping to root directory
+- **Expo Router with File-based Routing**: File structure in `app/` directory defines routes
+- **React Native 0.79.5 with React 19**: Latest RN with new architecture enabled
+- **TypeScript Configuration**: Strict mode with `@/*` path aliases
+- **Authentication**: Clerk for user management with React Native integration
+- **Database**: Supabase with Row Level Security (RLS) and automatic migration
+- **Internationalization**: Korean/English UI support via I18nContext
 
 ### Key Architectural Patterns
 
@@ -52,8 +75,12 @@ npx expo start --clear  # Clear cache when debugging
 - **Constants**: Centralized color definitions in `constants/Colors.ts` with light/dark variants
 
 #### State & Data Flow
-- React Context for theme management (via `@react-navigation/native` ThemeProvider)
-- Custom hooks for accessing theme and color scheme consistently across components
+- **Authentication**: Clerk's `useAuth()` and `useSession()` hooks
+- **Database**: Custom `useSupabase()` hook with Clerk JWT integration
+- **Dog Data**: `DogContext` with automatic Supabase synchronization
+- **Migration**: `useDatabaseMigration()` for local-to-cloud data migration
+- **Internationalization**: `I18nContext` for Korean/English switching
+- **Error Handling**: Comprehensive error boundary with localized messages
 
 ### Configuration Files
 
@@ -72,13 +99,37 @@ npx expo start --clear  # Clear cache when debugging
 - Typed routes experiment enabled
 - Splash screen and adaptive icons configured
 
+#### Environment Variables (`.env`)
+- `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`: Clerk authentication key
+- `EXPO_PUBLIC_SUPABASE_URL`: Supabase project URL
+- `EXPO_PUBLIC_SUPABASE_KEY`: New format key (sb_publishable_...)
+- Legacy `EXPO_PUBLIC_SUPABASE_ANON_KEY` supported for migration
+
 ## Development Patterns
 
 ### File Organization
-- Main app code goes in `app/` directory
-- Example/reference code preserved in `app-example/`
-- Shared components should follow the pattern in `app-example/components/`
-- Platform-specific code uses `.ios.tsx`, `.android.tsx`, or `.web.ts` extensions
+```
+app/
+├── (auth)/          # Authentication screens
+├── (home)/          # Main app screens (protected)
+├── _layout.tsx      # Root layout with Clerk provider
+└── index.tsx        # App entry point with auth check
+
+components/
+├── auth/            # Authentication components
+├── ui/              # Reusable UI components
+└── MigrationStatus.tsx  # Database migration UI
+
+hooks/
+├── useSupabase.ts   # Authenticated Supabase client
+├── useDatabaseMigration.ts  # Auto migration logic
+└── useSupabaseDogs.ts      # Dog data operations
+
+utils/
+├── supabase.ts      # Supabase configuration
+├── validateEnv.ts   # Environment validation
+└── authErrorHandler.ts    # Localized error handling
+```
 
 ### Import Conventions
 - Use `@/` prefix for root-relative imports (e.g., `@/hooks/useColorScheme`)
@@ -93,9 +144,25 @@ npx expo start --clear  # Clear cache when debugging
 
 ## Current State
 
-The project is a fresh Expo app with:
-- Basic routing setup with a single index screen
-- Example code in `app-example/` demonstrating tabs navigation, theming, and component patterns
-- Ready for development with all dependencies installed
+**DogiGuard** is a pet medication tracking app with:
+- ✅ **Complete Authentication**: Clerk integration with Korean/English UI
+- ✅ **Database Integration**: Supabase with automatic migration from local storage
+- ✅ **Dog Profile Management**: Full CRUD operations with photo support
+- ✅ **Medication Tracking**: Heartwork medication scheduling and notifications
+- ✅ **Error Handling**: Comprehensive error handling with user-friendly messages
+- ✅ **Environment Resilience**: Graceful handling of missing configuration
 
-To start building, modify files in the `app/` directory following the patterns demonstrated in `app-example/`.
+### Key Features Implemented
+- User registration/login with email code verification
+- Dog profile creation and editing with photo upload
+- Medication tracking with next dose calculations
+- Automatic data migration from local storage to cloud
+- Bilingual UI (Korean/English) with proper localization
+- Row Level Security (RLS) for data isolation between users
+
+### Recent Fixes
+- Fixed "supabaseKey is required" startup crash
+- Updated to 2025 Supabase security standards
+- Resolved Clerk-Supabase JWT integration issues
+- Improved authentication error handling
+- Added comprehensive environment variable validation

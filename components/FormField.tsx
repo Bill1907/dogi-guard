@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     // Container for the actual input
+    minHeight: 48,
   },
   errorContainer: {
     marginTop: 6,

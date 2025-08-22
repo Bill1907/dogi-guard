@@ -54,9 +54,25 @@ export class DogFormValidator {
       return { isValid: true };
     }
     
-    // Basic URI validation for local files
-    if (!photo.startsWith('file://') && !photo.startsWith('content://') && !photo.startsWith('ph://')) {
+    // Support both local files and cloud storage URLs
+    const isLocalFile = photo.startsWith('file://') || 
+                       photo.startsWith('content://') || 
+                       photo.startsWith('ph://');
+    
+    const isCloudStorage = photo.startsWith('https://') || 
+                          photo.startsWith('http://');
+    
+    if (!isLocalFile && !isCloudStorage) {
       return { isValid: false, error: 'validation.photoInvalid' };
+    }
+    
+    // Additional validation for HTTPS URLs
+    if (isCloudStorage) {
+      try {
+        new URL(photo); // Validate URL format
+      } catch {
+        return { isValid: false, error: 'validation.photoInvalid' };
+      }
     }
     
     return { isValid: true };

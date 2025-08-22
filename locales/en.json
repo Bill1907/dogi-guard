@@ -1,6 +1,18 @@
 {
   "greeting": "Hello",
   "welcome": "Welcome to Dogi Guard",
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "retry": "Retry"
+  },
   "language": {
     "current": "Current Language",
     "english": "English",
@@ -14,9 +26,12 @@
   "dogProfile": {
     "years": "{{age}} years",
     "yearsOld": "{{age}} years old",
-    "weight": "{{weight}}kg",
-    "currentMedications": "Current Medications",
-    "noMedications": "No medications",
+    "age": "AGE",
+    "weight": "WEIGHT",
+    "currentMedications": "CURRENT MEDICATIONS",
+    "noMedications": "None",
+    "more": "more",
+    "photoNotFound": "Photo not found",
     "swipeHint": "Swipe to see more dogs"
   },
   "medication": {
@@ -66,7 +81,9 @@
     "ok": "OK",
     "done": "Done",
     "stay": "Stay",
-    "discard": "Discard"
+    "discard": "Discard",
+    "deleteDog": "Delete Dog",
+    "deleteConfirmation": "Are you sure you want to delete {{name}}? This action cannot be undone."
   },
   "form": {
     "addDog": "Add Dog Profile",
@@ -133,6 +150,128 @@
     "medicationTooLong": "Medication name is too long",
     "medicationDuplicate": "Duplicate medication found"
   },
+  "auth": {
+    "welcome": "Welcome to DogiGuard",
+    "subtitle": "The smart way to keep your dog healthy",
+    "getStarted": "Get Started with DogiGuard",
+    "getStartedSubtitle": "Your first step towards a healthy life with your companion",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "verifyEmail": "Verify Your Email",
+    "verificationCode": "Verification Code",
+    "verificationCodePlaceholder": "Enter 6-digit verification code",
+    "verify": "Verify",
+    "resendCode": "Resend Code",
+    "noAccount": "Don't have an account? ",
+    "hasAccount": "Already have an account? ",
+    "noCodeReceived": "Didn't receive the code? ",
+    "emailSentTo": "Verification code sent to {{email}}",
+    "passwordStrength": {
+      "weak": "Weak - Add more characters and variety",
+      "fair": "Fair - Add symbols or make it longer",
+      "good": "Good - Your password is secure",
+      "strong": "Strong - Excellent password!"
+    },
+    "passwordRequirements": {
+      "title": "Password Requirements:",
+      "minLength": "At least 8 characters long",
+      "uppercase": "Contains uppercase letters (A-Z)",
+      "lowercase": "Contains lowercase letters (a-z)",
+      "numbers": "Contains numbers (0-9)",
+      "symbols": "Contains symbols (!@#$%^&*)",
+      "noSpaces": "No spaces allowed"
+    },
+    "validation": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Password is required",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "passwordTooWeak": "Password is too weak. Please strengthen it.",
+      "passwordsDontMatch": "Passwords don't match",
+      "confirmPasswordRequired": "Please confirm your password",
+      "verificationCodeRequired": "Verification code is required",
+      "verificationCodeInvalid": "Please enter a valid 6-digit code"
+    },
+    "errors": {
+      "emailPasswordRequired": "Please enter email and password",
+      "allFieldsRequired": "All fields are required",
+      "emailRequired": "Email is required",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "passwordMismatch": "Passwords don't match",
+      "passwordsDontMatch": "Passwords don't match",
+      "passwordRequirements": "Password must meet the requirements above",
+      "invalidEmail": "Please enter a valid email address",
+      "verificationCodeRequired": "Please enter verification code",
+      "signInFailed": "Sign in failed. Please try again.",
+      "signUpFailed": "Sign up failed. Please try again.",
+      "signUpError": "An error occurred during sign up",
+      "verificationFailed": "Verification failed. Please check your code.",
+      "verificationError": "An error occurred during verification",
+      "resendFailed": "Failed to resend confirmation email",
+      "resendError": "An error occurred while resending code",
+      "emailAlreadyExists": "An account with this email already exists. Please sign in instead.",
+      "emailExists": "An account with this email already exists. Please sign in instead.",
+      "emailNotFound": "No account found with this email address.",
+      "emailNotConfirmed": "Please check your email and click the confirmation link before signing in.",
+      "invalidCredentials": "Invalid email or password. Please try again.",
+      "tooManyAttempts": "Too many attempts. Please wait before trying again.",
+      "networkError": "Network error. Please check your connection.",
+      "passwordCompromised": "This password has been found in a data breach. Please choose a different one.",
+      "passwordTooCommon": "This password is too common. Please choose a more unique one.",
+      "codeIncorrect": "Verification code is incorrect. Please try again.",
+      "codeExpired": "Verification code has expired. Please request a new one.",
+      "blockedEmail": "This email address is not allowed. Please use a different email.",
+      "authMethodNotEnabled": "Password authentication is not enabled. Please use email verification instead.",
+      "emailLinkNotSupported": "Email links are not supported in this app. Please use email verification codes instead.",
+      "parameterNotAllowed": "This authentication method is not configured. Please try a different method.",
+      "configurationError": "Authentication configuration error. Please contact administrator.",
+      "systemError": "A system error occurred. Please try again later.",
+    },
+    "success": {
+      "accountCreated": "Account created successfully! Please check your email.",
+      "emailVerified": "Email verified successfully! Welcome to DogiGuard.",
+      "passwordUpdated": "Password updated successfully.",
+      "codeSent": "Verification code sent successfully.",
+      "switchingToEmailCode": "Password authentication is disabled. Switching to email verification.",
+      "emailCodeSent": "Email verification code sent successfully. Please check your inbox.",
+      "alternativeMethodAvailable": "Alternative authentication method is available.",
+      "signInCodeSent": "Sign-in verification code sent successfully. Please check your email."
+    },
+    "createAccount": "Create Account",
+    "signUpSubtitle": "Join the DogiGuard community",
+    "passwordRequirementsText": "Password must be at least 6 characters long",
+    "alreadyHaveAccount": "Already have an account? ",
+    "resendConfirmation": "Resend Confirmation",
+    "backToSignIn": "Back to Sign In",
+    "signUpSuccess": {
+      "success": "Account Created!",
+      "checkEmail": "Please check your email to verify your account.",
+      "checkEmailDetail": "We've sent a confirmation link to your email address. Please click the link to complete your registration."
+    },
+    "confirmation": {
+      "resent": "Confirmation Email Sent",
+      "checkEmail": "Please check your email for the confirmation link."
+    },
+    "emailSignIn": {
+      "title": "Sign In with Email",
+      "subtitle": "Enter your email to receive a verification code",
+      "sendCode": "Send Verification Code",
+      "enterCode": "Enter the 6-digit code sent to your email",
+      "verifyAndSignIn": "Verify & Sign In",
+      "sendingCode": "Sending code...",
+      "verifying": "Verifying...",
+      "resendCode": "Resend Code",
+      "usePasswordInstead": "Use password instead",
+      "switchToPassword": "Switch to Password Login",
+      "switchToEmail": "Switch to Email Verification"
+    }
+  },
   "errors": {
     "loadingFailed": "Failed to load dogs",
     "savingFailed": "Failed to save dog",
@@ -142,5 +281,58 @@
     "photoError": "Photo Error",
     "cameraError": "Failed to take photo. Please try again.",
     "galleryError": "Failed to select photo. Please try again."
+  },
+  "notifications": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  "menu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "about": "About"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "name": "Name",
+    "memberSince": "Member Since",
+    "accountInfo": "Account Information",
+    "appInfo": "App Information",
+    "version": "Version",
+    "signOut": "Sign Out",
+    "signingOut": "Signing Out...",
+    "signOutConfirmation": "Are you sure you want to sign out?",
+    "welcomeUser": "Welcome",
+    "notAvailable": "Not available"
+  },
+  "migration": {
+    "title": "Migrate Your Data",
+    "description": "We found {{count}} dog profiles from your previous app usage. Would you like to migrate them to your new account?",
+    "feature1": "Keep all your dog profiles",
+    "feature2": "Preserve medication schedules",
+    "feature3": "Sync across all devices",
+    "migrate": "Migrate Data",
+    "skip": "Skip Migration",
+    "skipTitle": "Skip Migration?",
+    "skipMessage": "Are you sure you want to skip migrating your data? This cannot be undone.",
+    "inProgress": "Migrating your data, please wait...",
+    "success": "Migration Complete!",
+    "successMessage": "Successfully migrated {{count}} dog profiles to your account.",
+    "error": "Migration Failed",
+    "errorMessage": "Failed to migrate your data. Please try again or contact support."
+  },
+  "errors": {
+    "loadingFailed": "Failed to load dogs",
+    "savingFailed": "Failed to save dog",
+    "deletingFailed": "Failed to delete dog",
+    "updateFailed": "Failed to update dog",
+    "unexpectedError": "An unexpected error occurred",
+    "photoError": "Photo Error",
+    "cameraError": "Failed to take photo. Please try again.",
+    "galleryError": "Failed to select photo. Please try again.",
+    "signOutFailed": "Failed to sign out. Please try again."
   }
 }

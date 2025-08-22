@@ -12,6 +12,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useTranslation } from '@/hooks/useTranslation';
+import { PhotoService } from '@/services/PhotoService';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PhotoPickerProps {
   photo?: string;
@@ -27,7 +29,22 @@ export const PhotoPicker: React.FC<PhotoPickerProps> = ({
   error,
 }) => {
   const { t } = useTranslation();
+  const { session } = useAuth();
   const [loading, setLoading] = useState(false);
+
+  const handlePhotoRemove = async () => {
+    try {
+      // Delete from permanent storage if it exists
+      if (photo) {
+        await PhotoService.deletePhoto(photo, session);
+      }
+      onPhotoRemove();
+    } catch (error) {
+      console.error('Error removing photo:', error);
+      // Still call onPhotoRemove to update UI even if file deletion fails
+      onPhotoRemove();
+    }
+  };
 
   const requestPermissions = async () => {
     const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
@@ -52,13 +69,17 @@ export const PhotoPicker: React.FC<PhotoPickerProps> = ({
     try {
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: false,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0.8,
+        quality: 1, // Let PhotoService handle compression
+        exif: false, // Remove EXIF data for privacy and smaller file size
       });
 
       if (!result.canceled && result.assets[0]) {
-        onPhotoSelect(result.assets[0].uri);
+        // Save photo to permanent storage
+        const permanentUri = await PhotoService.savePhoto(result.assets[0].uri, session);
+        onPhotoSelect(permanentUri);
       }
     } catch (error) {
       console.error('Error taking photo:', error);
@@ -80,13 +101,17 @@ export const PhotoPicker: React.FC<PhotoPickerProps> = ({
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: false,
         allowsEditing: true,
         aspect: [1, 1],
-        quality: 0.8,
+        quality: 1, // Let PhotoService handle compression
+        exif: false, // Remove EXIF data for privacy and smaller file size
       });
 
       if (!result.canceled && result.assets[0]) {
-        onPhotoSelect(result.assets[0].uri);
+        // Save photo to permanent storage
+        const permanentUri = await PhotoService.savePhoto(result.assets[0].uri, session);
+        onPhotoSelect(permanentUri);
       }
     } catch (error) {
       console.error('Error picking photo:', error);
@@ -119,7 +144,7 @@ export const PhotoPicker: React.FC<PhotoPickerProps> = ({
           } else if (buttonIndex === 2) {
             pickFromGallery();
           } else if (buttonIndex === 3 && photo) {
-            onPhotoRemove();
+            handlePhotoRemove();
           }
         }
       );
@@ -132,7 +157,7 @@ export const PhotoPicker: React.FC<PhotoPickerProps> = ({
           { text: t('actions.cancel'), style: 'cancel' },
           { text: t('photo.takePhoto'), onPress: takePhoto },
           { text: t('photo.chooseFromGallery'), onPress: pickFromGallery },
-          ...(photo ? [{ text: t('photo.removePhoto'), onPress: onPhotoRemove, style: 'destructive' as const }] : []),
+          ...(photo ? [{ text: t('photo.removePhoto'), onPress: handlePhotoRemove, style: 'destructive' as const }] : []),
         ]
       );
     }

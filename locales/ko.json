@@ -1,6 +1,18 @@
 {
   "greeting": "안녕하세요",
   "welcome": "도기 가드에 오신 것을 환영합니다",
+  "common": {
+    "ok": "확인",
+    "cancel": "취소",
+    "confirm": "확인",
+    "delete": "삭제",
+    "edit": "편집",
+    "save": "저장",
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "retry": "다시 시도"
+  },
   "language": {
     "current": "현재 언어",
     "english": "영어",
@@ -14,9 +26,12 @@
   "dogProfile": {
     "years": "{{age}}살",
     "yearsOld": "{{age}}살",
-    "weight": "{{weight}}kg",
+    "age": "나이",
+    "weight": "체중",
     "currentMedications": "복용 중인 약",
     "noMedications": "복용 중인 약 없음",
+    "more": "더보기",
+    "photoNotFound": "사진을 찾을 수 없습니다",
     "swipeHint": "옆으로 밀어서 다른 강아지 보기"
   },
   "medication": {
@@ -66,7 +81,9 @@
     "ok": "확인",
     "done": "완료",
     "stay": "계속 작성",
-    "discard": "삭제"
+    "discard": "삭제",
+    "deleteDog": "강아지 삭제",
+    "deleteConfirmation": "정말로 {{name}}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
   },
   "form": {
     "addDog": "강아지 프로필 추가",
@@ -133,6 +150,128 @@
     "medicationTooLong": "약 이름이 너무 깁니다",
     "medicationDuplicate": "중복된 약이 있습니다"
   },
+  "auth": {
+    "welcome": "DogiGuard에 오신 것을 환영합니다",
+    "subtitle": "반려견의 건강을 지키는 스마트한 방법",
+    "getStarted": "DogiGuard 시작하기",
+    "getStartedSubtitle": "반려견과 함께하는 건강한 생활을 위한 첫 걸음",
+    "email": "이메일",
+    "emailPlaceholder": "이메일을 입력하세요",
+    "password": "비밀번호",
+    "passwordPlaceholder": "비밀번호를 입력하세요",
+    "confirmPassword": "비밀번호 확인",
+    "confirmPasswordPlaceholder": "비밀번호를 다시 입력하세요",
+    "signIn": "로그인",
+    "signUp": "회원가입",
+    "createAccount": "계정 만들기",
+    "signUpSubtitle": "DogiGuard 커뮤니티에 가입하기",
+    "passwordRequirementsText": "비밀번호는 최소 6자 이상이어야 합니다",
+    "alreadyHaveAccount": "이미 계정이 있으신가요? ",
+    "resendConfirmation": "확인 이메일 다시 보내기",
+    "backToSignIn": "로그인으로 돌아가기",
+    "signUpSuccess": {
+      "success": "계정이 생성되었습니다!",
+      "checkEmail": "이메일을 확인해서 계정을 인증해주세요.",
+      "checkEmailDetail": "이메일 주소로 확인 링크를 보냈습니다. 링크를 클릭해서 가입을 완료해주세요."
+    },
+    "confirmation": {
+      "resent": "확인 이메일이 전송되었습니다",
+      "checkEmail": "확인 링크가 포함된 이메일을 확인해주세요."
+    },
+    "verifyEmail": "이메일을 확인해주세요",
+    "verificationCode": "인증 코드",
+    "verificationCodePlaceholder": "6자리 인증 코드를 입력하세요",
+    "verify": "인증하기",
+    "resendCode": "다시 보내기",
+    "noAccount": "계정이 없으신가요? ",
+    "hasAccount": "이미 계정이 있으신가요? ",
+    "noCodeReceived": "코드를 받지 못하셨나요? ",
+    "emailSentTo": "{{email}}으로 전송된 인증 코드를 입력해주세요",
+    "passwordStrength": {
+      "weak": "약함 - 더 많은 문자와 다양성 추가",
+      "fair": "보통 - 기호를 추가하거나 더 길게",
+      "good": "좋음 - 안전한 비밀번호입니다",
+      "strong": "강함 - 훌륭한 비밀번호입니다!"
+    },
+    "passwordRequirements": {
+      "title": "비밀번호 요구사항:",
+      "minLength": "최소 8자 이상",
+      "uppercase": "대문자 포함 (A-Z)",
+      "lowercase": "소문자 포함 (a-z)",
+      "numbers": "숫자 포함 (0-9)",
+      "symbols": "기호 포함 (!@#$%^&*)",
+      "noSpaces": "공백 없음"
+    },
+    "validation": {
+      "emailRequired": "이메일은 필수입니다",
+      "emailInvalid": "올바른 이메일 주소를 입력해주세요",
+      "passwordRequired": "비밀번호는 필수입니다",
+      "passwordTooShort": "비밀번호는 최소 8자 이상이어야 합니다",
+      "passwordTooWeak": "비밀번호가 너무 약합니다. 더 강하게 만들어주세요.",
+      "passwordsDontMatch": "비밀번호가 일치하지 않습니다",
+      "confirmPasswordRequired": "비밀번호 확인을 입력해주세요",
+      "verificationCodeRequired": "인증 코드는 필수입니다",
+      "verificationCodeInvalid": "올바른 6자리 코드를 입력해주세요"
+    },
+    "errors": {
+      "allFieldsRequired": "모든 필드를 입력해주세요",
+      "emailRequired": "이메일은 필수입니다",
+      "emailPasswordRequired": "이메일과 비밀번호를 입력해주세요",
+      "passwordMismatch": "비밀번호가 일치하지 않습니다",
+      "passwordRequirements": "비밀번호 요구사항을 만족해주세요",
+      "invalidEmail": "올바른 이메일 주소를 입력해주세요",
+      "passwordTooShort": "비밀번호는 최소 8자 이상이어야 합니다",
+      "passwordsDontMatch": "비밀번호가 일치하지 않습니다",
+      "verificationCodeRequired": "인증 코드를 입력해주세요",
+      "signInFailed": "로그인에 실패했습니다. 다시 시도해주세요.",
+      "signUpFailed": "회원가입에 실패했습니다. 다시 시도해주세요.",
+      "signUpError": "회원가입 중 오류가 발생했습니다",
+      "verificationFailed": "인증에 실패했습니다. 코드를 확인해주세요.",
+      "verificationError": "인증 중 오류가 발생했습니다",
+      "resendFailed": "코드 재전송에 실패했습니다. 다시 시도해주세요.",
+      "resendError": "코드 재전송 중 오류가 발생했습니다",
+      "emailAlreadyExists": "이 이메일로 이미 계정이 존재합니다. 로그인해주세요.",
+      "emailExists": "이 이메일로 이미 계정이 존재합니다. 로그인해주세요.",
+      "emailNotFound": "이 이메일 주소로 등록된 계정을 찾을 수 없습니다.",
+      "emailNotConfirmed": "이메일을 확인한 후 로그인해주세요.",
+      "invalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다. 다시 시도해주세요.",
+      "tooManyAttempts": "너무 많은 시도입니다. 잠시 후 다시 시도해주세요.",
+      "networkError": "네트워크 오류입니다. 연결을 확인해주세요.",
+      "passwordCompromised": "이 비밀번호는 데이터 유출 사고에서 발견되었습니다. 다른 비밀번호를 선택해주세요.",
+      "passwordTooCommon": "이 비밀번호는 너무 일반적입니다. 더 고유한 비밀번호를 선택해주세요.",
+      "codeIncorrect": "인증 코드가 올바르지 않습니다. 다시 시도해주세요.",
+      "codeExpired": "인증 코드가 만료되었습니다. 새로운 코드를 요청해주세요.",
+      "blockedEmail": "이 이메일 주소는 허용되지 않습니다. 다른 이메일을 사용해주세요.",
+      "authMethodNotEnabled": "비밀번호 인증이 활성화되지 않았습니다. 이메일 인증을 사용해주세요.",
+      "emailLinkNotSupported": "이 앱에서는 이메일 링크가 지원되지 않습니다. 이메일 인증 코드를 사용해주세요.",
+      "parameterNotAllowed": "이 인증 방식이 설정되어 있지 않습니다. 다른 방법을 시도해주세요.",
+      "configurationError": "인증 설정 오류입니다. 관리자에게 문의해주세요.",
+      "systemError": "시스템 오류가 발생했습니다. 나중에 다시 시도해주세요.",
+    },
+    "success": {
+      "accountCreated": "계정이 성공적으로 생성되었습니다! 이메일을 확인해주세요.",
+      "emailVerified": "이메일이 성공적으로 인증되었습니다! DogiGuard에 오신 것을 환영합니다.",
+      "passwordUpdated": "비밀번호가 성공적으로 업데이트되었습니다.",
+      "codeSent": "인증 코드가 성공적으로 전송되었습니다.",
+      "switchingToEmailCode": "비밀번호 인증이 비활성화되어 있습니다. 이메일 인증으로 진행합니다.",
+      "emailCodeSent": "이메일 인증 코드가 성공적으로 전송되었습니다. 이메일을 확인해주세요.",
+      "alternativeMethodAvailable": "대안 인증 방법을 사용할 수 있습니다.",
+      "signInCodeSent": "로그인 인증 코드가 성공적으로 전송되었습니다. 이메일을 확인해주세요."
+    },
+    "emailSignIn": {
+      "title": "이메일로 로그인",
+      "subtitle": "이메일을 입력하시면 인증 코드를 보내드립니다",
+      "sendCode": "인증 코드 보내기",
+      "enterCode": "이메일로 전송된 6자리 코드를 입력하세요",
+      "verifyAndSignIn": "인증하고 로그인",
+      "sendingCode": "코드 전송 중...",
+      "verifying": "인증 중...",
+      "resendCode": "코드 재전송",
+      "usePasswordInstead": "비밀번호 사용하기",
+      "switchToPassword": "비밀번호 로그인으로 변경",
+      "switchToEmail": "이메일 인증으로 변경"
+    }
+  },
   "errors": {
     "loadingFailed": "강아지 정보를 불러오는데 실패했습니다",
     "savingFailed": "강아지 정보를 저장하는데 실패했습니다",
@@ -142,5 +281,58 @@
     "photoError": "사진 오류",
     "cameraError": "사진 촬영에 실패했습니다. 다시 시도해주세요.",
     "galleryError": "사진 선택에 실패했습니다. 다시 시도해주세요."
+  },
+  "notifications": {
+    "success": "성공",
+    "error": "오류",
+    "warning": "경고",
+    "info": "정보"
+  },
+  "menu": {
+    "profile": "프로필",
+    "settings": "설정",
+    "help": "도움말",
+    "about": "앱 정보"
+  },
+  "profile": {
+    "title": "프로필",
+    "email": "이메일",
+    "name": "이름",
+    "memberSince": "가입일",
+    "accountInfo": "계정 정보",
+    "appInfo": "앱 정보",
+    "version": "버전",
+    "signOut": "로그아웃",
+    "signingOut": "로그아웃 중...",
+    "signOutConfirmation": "정말로 로그아웃하시겠습니까?",
+    "welcomeUser": "환영합니다",
+    "notAvailable": "정보 없음"
+  },
+  "migration": {
+    "title": "데이터 마이그레이션",
+    "description": "이전 앱 사용 기록에서 {{count}}개의 강아지 프로필을 찾았습니다. 새 계정으로 마이그레이션하시겠습니까?",
+    "feature1": "모든 강아지 프로필 유지",
+    "feature2": "투약 일정 보존",
+    "feature3": "모든 기기에서 동기화",
+    "migrate": "데이터 마이그레이션",
+    "skip": "마이그레이션 건너뛰기",
+    "skipTitle": "마이그레이션을 건너뛰시겠습니까?",
+    "skipMessage": "정말로 데이터 마이그레이션을 건너뛰시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "inProgress": "데이터를 마이그레이션하고 있습니다. 잠시만 기다려주세요...",
+    "success": "마이그레이션 완료!",
+    "successMessage": "{{count}}개의 강아지 프로필을 성공적으로 계정에 마이그레이션했습니다.",
+    "error": "마이그레이션 실패",
+    "errorMessage": "데이터 마이그레이션에 실패했습니다. 다시 시도하거나 지원팀에 문의해주세요."
+  },
+  "errors": {
+    "loadingFailed": "강아지 정보를 불러오는데 실패했습니다",
+    "savingFailed": "강아지 정보를 저장하는데 실패했습니다",
+    "deletingFailed": "강아지 정보를 삭제하는데 실패했습니다",
+    "updateFailed": "강아지 정보를 수정하는데 실패했습니다",
+    "unexpectedError": "예기치 않은 오류가 발생했습니다",
+    "photoError": "사진 오류",
+    "cameraError": "사진 촬영에 실패했습니다. 다시 시도해주세요.",
+    "galleryError": "사진 선택에 실패했습니다. 다시 시도해주세요.",
+    "signOutFailed": "로그아웃에 실패했습니다. 다시 시도해주세요."
   }
 }

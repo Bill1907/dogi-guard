@@ -1,7 +1,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
-import { useDogs, UseDogsReturn } from '@/hooks/useDogs';
+import { useSupabaseDogs, UseSupabaseDogsReturn } from '@/hooks/useSupabaseDogs';
 
-interface DogContextType extends UseDogsReturn {}
+interface DogContextType extends UseSupabaseDogsReturn {}
 
 const DogContext = createContext<DogContextType | undefined>(undefined);
 
@@ -10,7 +10,7 @@ interface DogProviderProps {
 }
 
 export const DogProvider: React.FC<DogProviderProps> = ({ children }) => {
-  const dogsData = useDogs();
+  const dogsData = useSupabaseDogs();
 
   return (
     <DogContext.Provider value={dogsData}>

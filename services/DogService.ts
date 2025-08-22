@@ -1,6 +1,7 @@
 import { Dog } from '@/types/Dog';
 import { DogInput, DogUpdate, StorageData, DogServiceInterface } from '@/types/ServiceTypes';
 import { StorageService } from './StorageService';
+import { PhotoService } from './PhotoService';
 
 const STORAGE_KEY = '@DogiGuard:dogs';
 const STORAGE_VERSION = '1.0.0';
@@ -78,8 +79,9 @@ export class DogService implements DogServiceInterface {
    * Generate a unique ID for a new dog
    */
   private generateId(): string {
-    return `dog_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `dog_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
+
 
   /**
    * Get all dogs
@@ -161,18 +163,24 @@ export class DogService implements DogServiceInterface {
   /**
    * Delete a dog
    */
-  async deleteDog(id: string): Promise<boolean> {
+  async deleteDog(id: string, session?: any): Promise<boolean> {
     try {
       const data = await this.getStorageData();
-      const initialLength = data.dogs.length;
+      const dogToDelete = data.dogs.find(dog => dog.id === id);
       
-      data.dogs = data.dogs.filter(dog => dog.id !== id);
-      
-      if (data.dogs.length === initialLength) {
+      if (!dogToDelete) {
         return false; // Dog not found
       }
 
+      // Delete photo from storage if it exists
+      if (dogToDelete.photo) {
+        await PhotoService.deletePhoto(dogToDelete.photo, session);
+      }
+
+      // Remove dog from data
+      data.dogs = data.dogs.filter(dog => dog.id !== id);
       await this.saveStorageData(data);
+      
       return true;
     } catch (error) {
       console.error('Error deleting dog:', error);
@@ -201,8 +209,18 @@ export class DogService implements DogServiceInterface {
   /**
    * Clear all dogs (use with caution)
    */
-  async clearAllDogs(): Promise<boolean> {
+  async clearAllDogs(session?: any): Promise<boolean> {
     try {
+      // Get all dogs to delete their photos
+      const data = await this.getStorageData();
+      
+      // Delete all photos
+      for (const dog of data.dogs) {
+        if (dog.photo) {
+          await PhotoService.deletePhoto(dog.photo, session);
+        }
+      }
+      
       const emptyData: StorageData = {
         dogs: [],
         lastUpdated: new Date().toISOString(),
