@@ -13,7 +13,6 @@ import {
   Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -28,11 +27,10 @@ const { width: screenWidth } = Dimensions.get("window");
 export default function HomePage() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { dogs, loading, error, refreshing, refresh, clearError } =
+  const { dogs, loading, error, clearError } =
     useDogContext();
   const [currentDogIndex, setCurrentDogIndex] = useState(0);
   const scrollViewRef = useRef<ScrollView>(null);
-  const [isScrolling, setIsScrolling] = useState(false);
   const [isMomentumScrolling, setIsMomentumScrolling] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editingCardIndex, setEditingCardIndex] = useState<number | null>(null);
@@ -55,7 +53,7 @@ export default function HomePage() {
   };
 
   const handleScrollBeginDrag = () => {
-    setIsScrolling(true);
+    // Handle scroll begin
   };
 
   const handleScrollEndDrag = (
@@ -97,8 +95,7 @@ export default function HomePage() {
       setCurrentDogIndex(clampedIndex);
     }
     
-    // Reduce delay for better responsiveness
-    setTimeout(() => setIsScrolling(false), 50);
+    // Scroll handling complete
   };
 
   const handleAddProfile = () => {
@@ -135,7 +132,7 @@ export default function HomePage() {
       {/* Header */}
       <View style={styles.header}>
         <HamburgerMenu />
-        <Text style={styles.headerTitle}>DogiGuard</Text>
+        <View style={styles.headerSpacer} />
         <TouchableOpacity style={styles.addButton} onPress={handleAddProfile}>
           <Ionicons name="add" size={24} color={Theme.colors.text.primary} />
         </TouchableOpacity>
@@ -175,15 +172,6 @@ export default function HomePage() {
               decelerationRate={0.9}
               bounces={false}
               scrollEnabled={!editMode}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={refresh}
-                  colors={[Theme.colors.primary.main]}
-                  tintColor={Theme.colors.primary.main}
-                  enabled={!editMode}
-                />
-              }
             >
               <View
                 style={[
@@ -313,15 +301,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: Theme.spacing.lg,
     paddingVertical: Theme.spacing.md,
-    backgroundColor: Theme.colors.glass.background,
-    borderBottomWidth: 1,
-    borderBottomColor: Theme.colors.glass.border,
-    ...Theme.shadows.glassLight,
+    backgroundColor: "transparent",
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: Theme.colors.text.primary,
+  headerSpacer: {
+    flex: 1,
   },
   addButton: {
     width: 40,

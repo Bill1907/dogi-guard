@@ -42,11 +42,31 @@
     "dDayToday": "D-Day",
     "dDayOverdue": "D+{{days}}",
     "medicationName": "약 이름",
+    "calendar": "투약 달력",
+    "tapToFlip": "달력 보기 (터치)",
     "status": {
       "safe": "정상",
       "soon": "복용 예정",
       "urgent": "긴급",
       "overdue": "기한 초과!"
+    },
+    "record": {
+      "title": "약물 복용 기록",
+      "selectMedications": "복용한 약물 선택",
+      "dosage": "복용량",
+      "dosagePlaceholder": "예: 1정, 2ml",
+      "notes": "메모",
+      "notesPlaceholder": "부작용이나 특이사항을 기록하세요",
+      "record": "기록하기",
+      "noMedicationSelected": "복용한 약물을 하나 이상 선택해주세요",
+      "noMedications": "등록된 약물이 없습니다",
+      "addMedicationsFirst": "먼저 강아지 프로필에서 약물을 등록해주세요",
+      "success": "약물 복용이 성공적으로 기록되었습니다",
+      "failed": "약물 복용 기록에 실패했습니다",
+      "error": "오류",
+      "nextDoseUpdated": "다음 복용일이 업데이트되었습니다",
+      "clickDateToRecord": "날짜를 클릭하면 약물 복용을 기록할 수 있습니다",
+      "cannotRecordFuture": "미래 날짜에는 약물 복용을 기록할 수 없습니다"
     }
   },
   "empty": {

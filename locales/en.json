@@ -42,11 +42,31 @@
     "dDayToday": "D-Day",
     "dDayOverdue": "D+{{days}}",
     "medicationName": "Medication",
+    "calendar": "Medication Calendar",
+    "tapToFlip": "Tap to view calendar",
     "status": {
       "safe": "On schedule",
       "soon": "Coming soon",
       "urgent": "Urgent",
       "overdue": "Overdue!"
+    },
+    "record": {
+      "title": "Record Medication",
+      "selectMedications": "Select Medications Taken",
+      "dosage": "Dosage",
+      "dosagePlaceholder": "e.g., 1 tablet, 2ml",
+      "notes": "Notes",
+      "notesPlaceholder": "Record any side effects or special notes",
+      "record": "Record",
+      "noMedicationSelected": "Please select at least one medication",
+      "noMedications": "No medications registered",
+      "addMedicationsFirst": "Please add medications in the dog profile first",
+      "success": "Medication successfully recorded",
+      "failed": "Failed to record medication",
+      "error": "Error",
+      "nextDoseUpdated": "Next dose date has been updated",
+      "clickDateToRecord": "Click on a date to record medication",
+      "cannotRecordFuture": "Cannot record medication for future dates"
     }
   },
   "empty": {

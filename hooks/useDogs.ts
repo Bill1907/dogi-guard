@@ -8,11 +8,9 @@ interface UseDogsState {
   dogs: Dog[];
   loading: boolean;
   error: string | null;
-  refreshing: boolean;
 }
 
 interface UseDogsActions {
-  refresh: () => Promise<void>;
   createDog: (dogData: DogInput) => Promise<Dog | null>;
   updateDog: (id: string, updates: DogUpdate) => Promise<Dog | null>;
   deleteDog: (id: string) => Promise<boolean>;
@@ -29,7 +27,6 @@ export const useDogs = (): UseDogsReturn => {
     dogs: [],
     loading: true,
     error: null,
-    refreshing: false,
   });
 
   const setLoading = (loading: boolean) => {
@@ -47,9 +44,6 @@ export const useDogs = (): UseDogsReturn => {
     }));
   };
 
-  const setRefreshing = (refreshing: boolean) => {
-    setState(prev => ({ ...prev, refreshing }));
-  };
 
   const clearError = useCallback(() => {
     setError(null);
@@ -66,17 +60,6 @@ export const useDogs = (): UseDogsReturn => {
     }
   }, []);
 
-  const refresh = useCallback(async () => {
-    try {
-      setRefreshing(true);
-      await loadDogs();
-    } catch (error) {
-      console.error('Error refreshing dogs:', error);
-      setError('Failed to refresh dogs');
-    } finally {
-      setRefreshing(false);
-    }
-  }, [loadDogs]);
 
   const createDog = useCallback(async (dogData: DogInput): Promise<Dog | null> => {
     try {
@@ -171,10 +154,8 @@ export const useDogs = (): UseDogsReturn => {
     dogs: state.dogs,
     loading: state.loading,
     error: state.error,
-    refreshing: state.refreshing,
     
     // Actions
-    refresh,
     createDog,
     updateDog,
     deleteDog,
