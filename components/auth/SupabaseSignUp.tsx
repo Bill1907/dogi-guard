@@ -14,6 +14,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
 import { AuthContainer } from '@/components/auth/AuthContainer';
 import { GlassInput } from '@/components/auth/GlassInput';
+import { PasswordStrengthIndicator } from '@/components/auth/PasswordStrengthIndicator';
 import { Theme } from '@/constants/Theme';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -32,9 +33,19 @@ export default function SupabaseSignUp() {
 
   // Validate password strength
   const validatePassword = (password: string) => {
-    if (password.length < 6) {
-      return t('auth.errors.passwordTooShort');
+    if (password.length < 8) {
+      return t('auth.validation.passwordTooShort');
     }
+    
+    // Check for at least one uppercase, lowercase, and number
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    
+    if (!hasUppercase || !hasLowercase || !hasNumber) {
+      return t('auth.validation.passwordTooWeak');
+    }
+    
     return null;
   };
 
@@ -222,6 +233,9 @@ export default function SupabaseSignUp() {
           editable={!loading}
         />
 
+        {/* Password Strength Indicator */}
+        <PasswordStrengthIndicator password={password} />
+
         <GlassInput
           label={t('auth.confirmPassword')}
           value={confirmPassword}
@@ -232,10 +246,6 @@ export default function SupabaseSignUp() {
           editable={!loading}
         />
 
-        {/* Password Requirements */}
-        <Text style={styles.passwordRequirements}>
-          {t('auth.passwordRequirementsText')}
-        </Text>
 
         {/* Error Message */}
         {error ? <Text style={Theme.auth.errorText}>{error}</Text> : null}

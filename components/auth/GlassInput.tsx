@@ -17,6 +17,8 @@ interface GlassInputProps extends TextInputProps {
   rightIcon?: string;
   onRightIconPress?: () => void;
   isPassword?: boolean;
+  isValid?: boolean;
+  showValidation?: boolean;
 }
 
 export function GlassInput({
@@ -26,6 +28,8 @@ export function GlassInput({
   rightIcon,
   onRightIconPress,
   isPassword = false,
+  isValid,
+  showValidation = false,
   ...props
 }: GlassInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -68,6 +72,8 @@ export function GlassInput({
           styles.inputContainer,
           isFocused && styles.inputContainerFocused,
           errorMessage && styles.inputContainerError,
+          showValidation && isValid === true && styles.inputContainerValid,
+          showValidation && isValid === false && styles.inputContainerInvalid,
         ]}
       >
         {leftIcon && (
@@ -90,6 +96,13 @@ export function GlassInput({
           textContentType={isPassword ? 'none' : props.textContentType}
           // Additional iOS autofill prevention
           passwordRules={isPassword ? 'minlength: 8;' : undefined}
+          // Accessibility
+          accessibilityRole="textbox"
+          accessibilityLabel={label}
+          accessibilityHint={errorMessage ? `Error: ${errorMessage}` : undefined}
+          accessibilityState={{
+            invalid: !!errorMessage,
+          }}
         />
         {(rightIcon || isPassword) && (
           <TouchableOpacity
@@ -141,6 +154,14 @@ const styles = StyleSheet.create({
   inputContainerError: {
     borderColor: Theme.colors.status.danger,
     borderWidth: 2,
+  },
+  inputContainerValid: {
+    borderColor: Theme.colors.success,
+    borderWidth: 1.5,
+  },
+  inputContainerInvalid: {
+    borderColor: Theme.colors.status.danger,
+    borderWidth: 1.5,
   },
   input: {
     flex: 1,

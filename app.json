@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/images/playstore.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.boseongkim.dogiguard"
     },
     "web": {
       "bundler": "metro",
@@ -39,6 +40,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "a31c27f7-4e45-4b6f-a71f-5c0f0542a4d9"
+      }
+    },
+    "owner": "boseongkim"
   }
 }

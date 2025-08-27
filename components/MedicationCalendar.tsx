@@ -443,30 +443,30 @@ export const MedicationCalendar: React.FC<MedicationCalendarProps> = ({ dog, onF
             style={styles.scheduleCard}
           >
             <Text style={styles.sectionTitle}>
-              {currentLocale === 'ko' ? '투약 스케줄' : 'Medication Schedule'}
+              {t('medication.schedule.title')}
             </Text>
             <View style={styles.scheduleItem}>
               <Text style={styles.scheduleLabel}>
-                • {currentLocale === 'ko' ? '정기 투약 주기' : 'Regular interval'}
+                • {t('medication.schedule.regularInterval')}
               </Text>
               <Text style={styles.scheduleValue}>
-                {currentLocale === 'ko' ? '매월 1회' : 'Monthly'}
+                {t('medication.schedule.monthly')}
               </Text>
             </View>
             <View style={styles.scheduleItem}>
               <Text style={styles.scheduleLabel}>
-                • {currentLocale === 'ko' ? '다음 투약까지' : 'Until next dose'}
+                • {t('medication.schedule.untilNextDose')}
               </Text>
               <Text style={[styles.scheduleValue, { color: nextMedColor }]}>
-                {Math.abs(nextDDay)}{currentLocale === 'ko' ? '일' : ' days'} {nextDDay <= 0 ? (currentLocale === 'ko' ? '지연' : 'overdue') : (currentLocale === 'ko' ? '남음' : 'left')}
+                {Math.abs(nextDDay)} {nextDDay <= 0 ? t('medication.schedule.daysOverdue') : t('medication.schedule.daysLeft')}
               </Text>
             </View>
             <View style={styles.scheduleItem}>
               <Text style={styles.scheduleLabel}>
-                • {currentLocale === 'ko' ? '투약 시간 권장' : 'Recommended time'}
+                • {t('medication.schedule.recommendedTime')}
               </Text>
               <Text style={styles.scheduleValue}>
-                {currentLocale === 'ko' ? '오전 9:00 ~ 11:00' : '9:00 ~ 11:00 AM'}
+                {t('medication.schedule.morningTime')}
               </Text>
             </View>
           </LinearGradient>
@@ -479,19 +479,19 @@ export const MedicationCalendar: React.FC<MedicationCalendarProps> = ({ dog, onF
             style={styles.tipsCard}
           >
             <Text style={styles.sectionTitle}>
-              💡 {currentLocale === 'ko' ? '투약 팁' : 'Medication Tips'}
+              💡 {t('medication.tips.title')}
             </Text>
             <Text style={styles.tipText}>
-              • {currentLocale === 'ko' ? '같은 시간에 투약하여 습관을 만드세요' : 'Take medication at the same time to build routine'}
+              • {t('medication.tips.routine')}
             </Text>
             <Text style={styles.tipText}>
-              • {currentLocale === 'ko' ? '투약 전후 음식과 함께 주면 흡수가 좋습니다' : 'Give with food for better absorption'}
+              • {t('medication.tips.withFood')}
             </Text>
             <Text style={styles.tipText}>
-              • {currentLocale === 'ko' ? '투약 후 30분간 격렬한 운동은 피해주세요' : 'Avoid intense exercise for 30 minutes after medication'}
+              • {t('medication.tips.avoidExercise')}
             </Text>
             <Text style={styles.tipText}>
-              • {currentLocale === 'ko' ? '부작용이 있으면 즉시 수의사와 상담하세요' : 'Consult veterinarian immediately if side effects occur'}
+              • {t('medication.tips.consultVet')}
             </Text>
           </LinearGradient>
         </View>

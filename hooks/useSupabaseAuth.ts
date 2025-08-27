@@ -70,7 +70,7 @@ export const useSupabaseAuth = (): AuthState & AuthActions => {
         email,
         password,
         options: {
-          emailRedirectTo: `${process.env.EXPO_PUBLIC_SUPABASE_URL}/auth/v1/verify`,
+          emailRedirectTo: `dogiguard://email-confirm`,
         },
       });
 
@@ -171,7 +171,7 @@ export const useSupabaseAuth = (): AuthState & AuthActions => {
         type: 'signup',
         email,
         options: {
-          emailRedirectTo: `${process.env.EXPO_PUBLIC_SUPABASE_URL}/auth/v1/verify`,
+          emailRedirectTo: `dogiguard://email-confirm`,
         }
       });
 

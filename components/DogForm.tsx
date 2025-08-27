@@ -4,9 +4,12 @@ import { DogInput } from "@/types/ServiceTypes";
 import {
   calculateNextHeartworkDate,
   COMMON_HEARTWORM_MEDICATIONS,
+  convertWeightForStorage,
   DogFormData,
   DogFormErrors,
   DogFormValidator,
+  getDefaultWeightUnit,
+  getMedicationInterval,
 } from "@/utils/validation";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -49,6 +52,7 @@ export const DogForm: React.FC<DogFormProps> = ({
     photo: initialData?.photo || "",
     birth: initialData?.birth || null,
     weight: initialData?.weight?.toString() || "",
+    weightUnit: getDefaultWeightUnit(),
     currentMedications: initialData?.currentMedications || [],
     heartworkMedicationName: initialData?.heartworkMedicationName || "",
     lastHeartworkMedicationDate:
@@ -60,22 +64,24 @@ export const DogForm: React.FC<DogFormProps> = ({
   const [errors, setErrors] = useState<DogFormErrors>({});
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
-  // Auto-calculate next heartworm date when last date changes
+  // Auto-calculate next heartworm date when last date or medication changes
   useEffect(() => {
-    if (
-      formData.lastHeartworkMedicationDate &&
-      !formData.nextHeartworkMedicationDate
-    ) {
-      const nextDate = calculateNextHeartworkDate(
-        formData.lastHeartworkMedicationDate
-      );
-      setFormData((prev) => ({
-        ...prev,
-        nextHeartworkMedicationDate: nextDate,
-      }));
+    if (formData.lastHeartworkMedicationDate && formData.heartworkMedicationName) {
+      // Only auto-calculate if there's no next date set
+      if (!formData.nextHeartworkMedicationDate) {
+        const nextDate = calculateNextHeartworkDate(
+          formData.lastHeartworkMedicationDate,
+          formData.heartworkMedicationName
+        );
+        setFormData((prev) => ({
+          ...prev,
+          nextHeartworkMedicationDate: nextDate,
+        }));
+      }
     }
   }, [
     formData.lastHeartworkMedicationDate,
+    formData.heartworkMedicationName,
     formData.nextHeartworkMedicationDate,
   ]);
 
@@ -114,11 +120,16 @@ export const DogForm: React.FC<DogFormProps> = ({
     }
 
     // Convert form data to DogInput format
+    const weightInKg = convertWeightForStorage(
+      parseFloat(formData.weight),
+      formData.weightUnit
+    );
+    
     const dogInput: DogInput = {
       name: formData.name.trim(),
       photo: formData.photo,
       birth: formData.birth!,
-      weight: parseFloat(formData.weight),
+      weight: weightInKg,
       currentMedications: formData.currentMedications,
       heartworkMedicationName: formData.heartworkMedicationName.trim(),
       lastHeartworkMedicationDate: formData.lastHeartworkMedicationDate!,
@@ -162,6 +173,20 @@ export const DogForm: React.FC<DogFormProps> = ({
 
   const suggestHeartworkMedication = (medication: string) => {
     updateField("heartworkMedicationName", medication);
+    
+    // Auto-calculate next date if last date is available
+    if (formData.lastHeartworkMedicationDate) {
+      const nextDate = calculateNextHeartworkDate(
+        formData.lastHeartworkMedicationDate,
+        medication
+      );
+      updateField("nextHeartworkMedicationDate", nextDate);
+    }
+  };
+  
+  const toggleWeightUnit = () => {
+    const newUnit = formData.weightUnit === 'kg' ? 'lbs' : 'kg';
+    updateField('weightUnit', newUnit);
   };
 
   return (
@@ -189,7 +214,7 @@ export const DogForm: React.FC<DogFormProps> = ({
             onChangeText={(value) => updateField("name", value)}
             placeholder={t("form.enterDogName")}
             placeholderTextColor="#95a5a6"
-            autoCapitalize="words"
+            autoCapitalize="none"
             autoCorrect={false}
             maxLength={50}
           />
@@ -227,8 +252,16 @@ export const DogForm: React.FC<DogFormProps> = ({
               keyboardType="decimal-pad"
               maxLength={5}
             />
-            <Text style={styles.weightUnit}>kg</Text>
+            <TouchableOpacity
+              style={styles.weightUnitButton}
+              onPress={toggleWeightUnit}
+            >
+              <Text style={styles.weightUnit}>{formData.weightUnit}</Text>
+            </TouchableOpacity>
           </View>
+          <Text style={styles.weightUnitHint}>
+            {t("form.weightUnitHint", { unit: formData.weightUnit })}
+          </Text>
         </FormField>
 
         {/* Current Medications */}
@@ -258,7 +291,7 @@ export const DogForm: React.FC<DogFormProps> = ({
             }
             placeholder={t("form.enterHeartworkMedicine")}
             placeholderTextColor="#95a5a6"
-            autoCapitalize="words"
+            autoCapitalize="none"
             autoCorrect={false}
             maxLength={100}
           />
@@ -272,11 +305,22 @@ export const DogForm: React.FC<DogFormProps> = ({
               <View style={styles.suggestionsList}>
                 {COMMON_HEARTWORM_MEDICATIONS.slice(0, 3).map((med) => (
                   <TouchableOpacity
-                    key={med}
+                    key={med.name}
                     style={styles.suggestionPill}
-                    onPress={() => suggestHeartworkMedication(med)}
+                    onPress={() => suggestHeartworkMedication(med.name)}
                   >
-                    <Text style={styles.suggestionText}>{med}</Text>
+                    <View style={styles.suggestionContent}>
+                      <Text style={styles.suggestionText}>{med.name}</Text>
+                      <Text style={styles.suggestionInterval}>
+                        {med.interval === 30 
+                          ? t("form.monthly")
+                          : med.interval === 90 
+                          ? t("form.quarterly")
+                          : med.interval === 180
+                          ? t("form.semiAnnual")
+                          : t("form.annual")}
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -314,6 +358,17 @@ export const DogForm: React.FC<DogFormProps> = ({
             placeholder={t("form.selectNextDate")}
             minimumDate={new Date()}
           />
+          {formData.heartworkMedicationName && formData.lastHeartworkMedicationDate && (
+            <View style={styles.autoCalculateHint}>
+              <Ionicons name="information-circle-outline" size={16} color="#636e72" />
+              <Text style={styles.autoCalculateText}>
+                {t("form.autoCalculatedFor", {
+                  medication: formData.heartworkMedicationName,
+                  interval: getMedicationInterval(formData.heartworkMedicationName)
+                })}
+              </Text>
+            </View>
+          )}
         </FormField>
       </ScrollView>
 
@@ -392,10 +447,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
   },
+  weightUnitButton: {
+    backgroundColor: "#f8f9fa",
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    minWidth: 60,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   weightUnit: {
     fontSize: 16,
     color: "#2d3436",
     fontWeight: "600",
+  },
+  weightUnitHint: {
+    fontSize: 12,
+    color: "#636e72",
+    marginTop: 4,
+    fontStyle: "italic",
   },
   suggestions: {
     marginTop: 8,
@@ -412,14 +484,42 @@ const styles = StyleSheet.create({
   suggestionPill: {
     backgroundColor: "#f0f3ff",
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "#667eea",
+    minWidth: 100,
+  },
+  suggestionContent: {
+    alignItems: "center",
   },
   suggestionText: {
     fontSize: 12,
     color: "#667eea",
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  suggestionInterval: {
+    fontSize: 10,
+    color: "#95a5a6",
+    marginTop: 2,
+    textAlign: "center",
+  },
+  autoCalculateHint: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    backgroundColor: "#f8f9fa",
+    borderRadius: 6,
+    gap: 6,
+  },
+  autoCalculateText: {
+    fontSize: 12,
+    color: "#636e72",
+    flex: 1,
+    fontStyle: "italic",
   },
   buttonContainer: {
     flexDirection: "row",

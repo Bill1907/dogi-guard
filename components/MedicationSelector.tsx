@@ -40,7 +40,7 @@ export const MedicationSelector: React.FC<MedicationSelectorProps> = ({
 
   // Get all available medications (heartworm + current medications)
   const allMedications = React.useMemo(() => {
-    const medications: Array<{ name: string; isHeartworm: boolean }> = [];
+    const medications: { name: string; isHeartworm: boolean }[] = [];
     
     // Add heartworm medication
     if (dog.heartworkMedicationName) {

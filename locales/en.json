@@ -67,6 +67,23 @@
       "nextDoseUpdated": "Next dose date has been updated",
       "clickDateToRecord": "Click on a date to record medication",
       "cannotRecordFuture": "Cannot record medication for future dates"
+    },
+    "schedule": {
+      "title": "Medication Schedule",
+      "regularInterval": "Regular interval",
+      "monthly": "Monthly",
+      "untilNextDose": "Until next dose",
+      "daysLeft": "days left",
+      "daysOverdue": "days overdue",
+      "recommendedTime": "Recommended time",
+      "morningTime": "9:00 ~ 11:00 AM"
+    },
+    "tips": {
+      "title": "Medication Tips",
+      "routine": "Take medication at the same time to build routine",
+      "withFood": "Give with food for better absorption",
+      "avoidExercise": "Avoid intense exercise for 30 minutes after medication",
+      "consultVet": "Consult veterinarian immediately if side effects occur"
     }
   },
   "empty": {
@@ -115,12 +132,18 @@
     "selectBirthDate": "Select birth date",
     "weight": "Weight",
     "enterWeight": "Enter weight",
+    "weightUnitHint": "Tap the unit button to switch between kg and lbs",
     "currentMedications": "Current Medications",
     "addMedication": "Add medication",
     "noMedicationsAdded": "No medications added",
     "heartworkMedicine": "Heartworm Medicine",
     "enterHeartworkMedicine": "Enter heartworm medicine name",
     "commonMedicines": "Common medicines",
+    "monthly": "Monthly",
+    "quarterly": "Every 3 months",
+    "semiAnnual": "Every 6 months",
+    "annual": "Yearly",
+    "autoCalculatedFor": "Auto-calculated based on {{medication}} ({{interval}} days)",
     "lastHeartworkDate": "Last Heartworm Dose",
     "selectLastDate": "Select last dose date",
     "nextHeartworkDate": "Next Heartworm Dose",
@@ -132,7 +155,8 @@
     "validationError": "Validation Error",
     "pleaseFixErrors": "Please fix the errors and try again",
     "unsavedChanges": "Unsaved Changes",
-    "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to leave?"
+    "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to leave?",
+    "weightConversionNote": "Weight will be stored in kg regardless of unit selected"
   },
   "photo": {
     "addPhoto": "Add Photo",
@@ -157,6 +181,7 @@
     "weightInvalid": "Please enter a valid weight",
     "weightTooLow": "Weight must be greater than 0",
     "weightTooHigh": "Weight must be less than 100kg",
+    "weightTooHighLbs": "Weight must be less than 220 lbs (100kg)",
     "heartworkMedicationRequired": "Heartworm medication name is required",
     "heartworkMedicationTooLong": "Medication name is too long",
     "lastDateRequired": "Last dose date is required",
@@ -272,7 +297,8 @@
     "signUpSuccess": {
       "success": "Account Created!",
       "checkEmail": "Please check your email to verify your account.",
-      "checkEmailDetail": "We've sent a confirmation link to your email address. Please click the link to complete your registration."
+      "checkEmailDetail": "We've sent a confirmation link to your email address. Click the link in your email to automatically open DogiGuard and complete your registration.",
+      "deepLinkInfo": "The confirmation link will open this app automatically."
     },
     "confirmation": {
       "resent": "Confirmation Email Sent",
@@ -290,6 +316,29 @@
       "usePasswordInstead": "Use password instead",
       "switchToPassword": "Switch to Password Login",
       "switchToEmail": "Switch to Email Verification"
+    },
+    "emailConfirmation": {
+      "verifying": "Verifying Email...",
+      "pleaseWait": "Please wait while we verify your email address",
+      "success": "Email Confirmed!",
+      "welcomeMessage": "Welcome to DogiGuard! Your email has been successfully verified.",
+      "autoRedirect": "You will be redirected to the app in 3 seconds...",
+      "continue": "Continue to App",
+      "error": "Verification Failed",
+      "errorMessage": "We couldn't verify your email. Please try signing up again or contact support.",
+      "backToSignIn": "Back to Sign In"
+    },
+    "forgotPassword": {
+      "link": "Forgot Password?",
+      "title": "Reset Password",
+      "subtitle": "Enter your email to receive password reset instructions",
+      "sendResetLink": "Send Reset Link",
+      "emailSent": "Password reset link sent to {{email}}",
+      "checkEmail": "Please check your email for instructions to reset your password",
+      "backToSignIn": "Back to Sign In",
+      "resetSuccess": "Password reset successfully",
+      "sending": "Sending...",
+      "resendLink": "Resend Reset Link"
     }
   },
   "errors": {

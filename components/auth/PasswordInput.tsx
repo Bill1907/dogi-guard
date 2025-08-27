@@ -8,6 +8,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { GlassInput } from './GlassInput';
 import { Theme } from '@/constants/Theme';
+import { useTranslation } from '@/hooks/useTranslation';
 // Simple password validation
 const validatePassword = (password: string) => {
   if (!password) return { score: 0, feedback: 'Enter a password' };
@@ -16,7 +17,6 @@ const validatePassword = (password: string) => {
   if (password.length >= 8) return { score: 3, feedback: 'Good' };
   return { score: 4, feedback: 'Strong' };
 };
-import { useTranslation } from '@/hooks/useTranslation';
 
 interface PasswordInputProps {
   label: string;

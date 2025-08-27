@@ -10,27 +10,31 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Link, useRouter } from 'expo-router';
-import { useAuth } from '@/contexts/AuthContext';
 import { useTranslation } from '@/hooks/useTranslation';
 import { AuthContainer } from '@/components/auth/AuthContainer';
 import { GlassInput } from '@/components/auth/GlassInput';
 import { Theme } from '@/constants/Theme';
+import { supabase } from '@/utils/supabase';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-export default function SupabaseSignIn() {
-  const { signIn } = useAuth();
+export default function ForgotPassword() {
   const router = useRouter();
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  // Handle sign-in
-  const handleSignIn = async () => {
-    if (!email || !password) {
-      setError(t('auth.errors.emailPasswordRequired'));
+  const handleResetPassword = async () => {
+    if (!email) {
+      setError(t('auth.errors.emailRequired'));
+      return;
+    }
+
+    // Basic email validation
+    if (!email.includes('@')) {
+      setError(t('auth.validation.emailInvalid'));
       return;
     }
 
@@ -38,31 +42,33 @@ export default function SupabaseSignIn() {
     setError('');
 
     try {
-      const { error: signInError } = await signIn(email, password);
-      
-      if (signInError) {
-        console.error('Sign in error:', signInError);
-        
-        // Handle specific error cases
-        if (signInError.message?.includes('Email not confirmed')) {
-          setError(t('auth.errors.emailNotConfirmed'));
-        } else if (signInError.message?.includes('Invalid login credentials')) {
-          setError(t('auth.errors.invalidCredentials'));
-        } else {
-          setError(signInError.message || t('auth.errors.signInFailed'));
-        }
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'dogiguard://reset-password',
+      });
+
+      if (resetError) {
+        console.error('Password reset error:', resetError);
+        setError(resetError.message || t('auth.errors.networkError'));
       } else {
-        // Success - router will automatically redirect via AuthContext
-        console.log('Sign in successful');
+        setSuccess(true);
+        Alert.alert(
+          t('auth.forgotPassword.title'),
+          t('auth.forgotPassword.checkEmail'),
+          [
+            {
+              text: t('common.ok'),
+              onPress: () => router.replace('/(auth)/sign-in'),
+            },
+          ]
+        );
       }
     } catch (err: any) {
-      console.error('Sign in exception:', err);
-      setError(t('auth.errors.signInFailed'));
+      console.error('Password reset exception:', err);
+      setError(t('auth.errors.networkError'));
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <AuthContainer>
@@ -76,12 +82,11 @@ export default function SupabaseSignIn() {
             transition={1000}
           />
         </View>
-        <Text style={Theme.auth.title}>{t('auth.welcome')}</Text>
-        <Text style={Theme.auth.subtitle}>{t('auth.subtitle')}</Text>
+        <Text style={Theme.auth.title}>{t('auth.forgotPassword.title')}</Text>
+        <Text style={Theme.auth.subtitle}>{t('auth.forgotPassword.subtitle')}</Text>
       </View>
 
-
-      {/* Auth Form */}
+      {/* Form */}
       <View style={styles.formContainer}>
         <GlassInput
           label={t('auth.email')}
@@ -92,62 +97,47 @@ export default function SupabaseSignIn() {
           autoCapitalize="none"
           autoCorrect={false}
           leftIcon="mail"
-          editable={!loading}
-        />
-
-        <GlassInput
-          label={t('auth.password')}
-          value={password}
-          onChangeText={setPassword}
-          placeholder={t('auth.passwordPlaceholder')}
-          isPassword
-          leftIcon="lock-closed"
-          editable={!loading}
+          editable={!loading && !success}
         />
 
         {/* Error Message */}
         {error ? <Text style={Theme.auth.errorText}>{error}</Text> : null}
+
+        {/* Success Message */}
+        {success && (
+          <View style={styles.successContainer}>
+            <Text style={styles.successText}>
+              {t('auth.forgotPassword.emailSent', { email })}
+            </Text>
+          </View>
+        )}
 
         {/* Submit Button */}
         <TouchableOpacity
           style={[
             Theme.auth.primaryButton,
             styles.submitButton,
-            loading && styles.buttonDisabled,
+            (loading || success) && styles.buttonDisabled,
           ]}
-          onPress={handleSignIn}
-          disabled={loading}
+          onPress={handleResetPassword}
+          disabled={loading || success}
         >
           {loading ? (
             <ActivityIndicator size="small" color="white" />
           ) : (
             <Text style={styles.submitButtonText}>
-              {t('auth.signIn')}
+              {success ? t('auth.forgotPassword.resendLink') : t('auth.forgotPassword.sendResetLink')}
             </Text>
           )}
         </TouchableOpacity>
-
-        {/* Forgot Password Link */}
-        <Link href="/(auth)/forgot-password" asChild>
-          <TouchableOpacity 
-            style={styles.forgotPasswordButton}
-            disabled={loading}
-          >
-            <Text style={[Theme.auth.linkText, loading && styles.linkDisabled]}>
-              {t('auth.forgotPassword.link')}
-            </Text>
-          </TouchableOpacity>
-        </Link>
-
       </View>
 
       {/* Footer */}
       <View style={styles.footer}>
-        <Text style={styles.footerText}>{t('auth.noAccount')}</Text>
-        <Link href="/(auth)/sign-up" asChild>
+        <Link href="/(auth)/sign-in" asChild>
           <TouchableOpacity disabled={loading}>
             <Text style={[Theme.auth.linkText, loading && styles.linkDisabled]}>
-              {t('auth.signUp')}
+              {t('auth.forgotPassword.backToSignIn')}
             </Text>
           </TouchableOpacity>
         </Link>
@@ -187,19 +177,21 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     opacity: 0.6,
   },
-  forgotPasswordButton: {
-    alignItems: 'center',
+  successContainer: {
+    backgroundColor: Theme.colors.success + '20',
+    padding: Theme.spacing.md,
+    borderRadius: Theme.borderRadius.md,
     marginTop: Theme.spacing.md,
   },
+  successText: {
+    color: Theme.colors.success,
+    textAlign: 'center',
+    fontSize: 14,
+    lineHeight: 20,
+  },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
     marginTop: Theme.spacing.xxxl,
-  },
-  footerText: {
-    fontSize: 16,
-    color: Theme.colors.text.secondary,
   },
   linkDisabled: {
     opacity: 0.5,

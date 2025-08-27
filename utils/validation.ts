@@ -8,6 +8,7 @@ export interface DogFormData {
   photo: string;
   birth: Date | null;
   weight: string;
+  weightUnit: 'kg' | 'lbs';
   currentMedications: string[];
   heartworkMedicationName: string;
   lastHeartworkMedicationDate: Date | null;
@@ -19,6 +20,7 @@ export interface DogFormErrors {
   photo?: string;
   birth?: string;
   weight?: string;
+  weightUnit?: string;
   currentMedications?: string;
   heartworkMedicationName?: string;
   lastHeartworkMedicationDate?: string;
@@ -39,8 +41,11 @@ export class DogFormValidator {
       return { isValid: false, error: 'validation.nameTooLong' };
     }
     
-    // Allow letters, spaces, hyphens, and apostrophes
-    const nameRegex = /^[a-zA-Z\s\-']+$/;
+    // Allow Latin letters, Korean Hangul, spaces, hyphens, and apostrophes
+    // \u0041-\u005A: Latin uppercase (A-Z)
+    // \u0061-\u007A: Latin lowercase (a-z)
+    // \uAC00-\uD7A3: Korean Hangul syllables (가-힣)
+    const nameRegex = /^[\u0041-\u005A\u0061-\u007A\uAC00-\uD7A3\s\-']+$/;
     if (!nameRegex.test(name.trim())) {
       return { isValid: false, error: 'validation.nameInvalidCharacters' };
     }
@@ -98,7 +103,7 @@ export class DogFormValidator {
     return { isValid: true };
   }
 
-  static validateWeight(weightString: string): ValidationResult {
+  static validateWeight(weightString: string, unit: 'kg' | 'lbs' = 'kg'): ValidationResult {
     if (!weightString || weightString.trim().length === 0) {
       return { isValid: false, error: 'validation.weightRequired' };
     }
@@ -112,8 +117,11 @@ export class DogFormValidator {
       return { isValid: false, error: 'validation.weightTooLow' };
     }
     
-    if (weight > 100) {
-      return { isValid: false, error: 'validation.weightTooHigh' };
+    // Convert weight to kg for validation if necessary
+    const weightInKg = unit === 'lbs' ? convertLbsToKg(weight) : weight;
+    
+    if (weightInKg > 100) {
+      return { isValid: false, error: unit === 'lbs' ? 'validation.weightTooHighLbs' : 'validation.weightTooHigh' };
     }
     
     return { isValid: true };
@@ -231,7 +239,7 @@ export class DogFormValidator {
     }
 
     // Validate weight
-    const weightResult = this.validateWeight(data.weight);
+    const weightResult = this.validateWeight(data.weight, data.weightUnit);
     if (!weightResult.isValid) {
       errors.weight = weightResult.error;
       isValid = false;
@@ -276,23 +284,111 @@ export class DogFormValidator {
   }
 }
 
-// Helper function to calculate next heartworm medication date
-export const calculateNextHeartworkDate = (lastDate: Date): Date => {
+// Weight conversion utilities
+export const convertLbsToKg = (lbs: number): number => {
+  return Math.round((lbs * 0.453592) * 100) / 100; // Round to 2 decimal places
+};
+
+export const convertKgToLbs = (kg: number): number => {
+  return Math.round((kg / 0.453592) * 100) / 100; // Round to 2 decimal places
+};
+
+export const convertWeightForStorage = (weight: number, unit: 'kg' | 'lbs'): number => {
+  if (unit === 'lbs') {
+    return convertLbsToKg(weight);
+  }
+  return weight; // Already in kg
+};
+
+export const getDefaultWeightUnit = (): 'kg' | 'lbs' => {
+  // Default to pounds for US users, kg for others
+  // Use expo-localization to get device locale reliably
+  try {
+    // Safe import of expo-localization
+    const Localization = require('expo-localization');
+    const locales = Localization.getLocales();
+    
+    // Check if we have locale data
+    if (locales && locales.length > 0) {
+      const locale = locales[0];
+      // Check region code for US
+      if (locale.regionCode === 'US' || locale.languageTag?.includes('US')) {
+        return 'lbs';
+      }
+    }
+  } catch (error) {
+    // If expo-localization fails, default to kg
+    console.log('Unable to detect locale for weight unit, defaulting to kg');
+  }
+  
+  // Default to kg for non-US users or when detection fails
+  return 'kg';
+};
+
+// Medication-specific intervals (in days)
+export const MEDICATION_INTERVALS: Record<string, number> = {
+  'heartgard plus': 30,
+  'heartgard': 30,
+  'nexgard spectra': 30,
+  'nexgard': 30,
+  'simparica trio': 30,
+  'simparica': 30,
+  'bravecto plus': 90, // 3 months
+  'bravecto': 90, // 3 months
+  'revolution plus': 30,
+  'revolution': 30,
+  'advantage multi': 30,
+  'sentinel spectrum': 30,
+  'sentinel': 30,
+  'interceptor plus': 30,
+  'interceptor': 30,
+  'proheart 6': 180, // 6 months
+  'proheart 12': 365, // 12 months
+  'proheart': 180, // Default to 6 months
+};
+
+// Helper function to get medication interval
+export const getMedicationInterval = (medicationName: string): number => {
+  const lowerName = medicationName.toLowerCase().trim();
+  
+  // Try exact match first
+  if (MEDICATION_INTERVALS[lowerName]) {
+    return MEDICATION_INTERVALS[lowerName];
+  }
+  
+  // Try partial matches
+  for (const [medName, interval] of Object.entries(MEDICATION_INTERVALS)) {
+    if (lowerName.includes(medName) || medName.includes(lowerName)) {
+      return interval;
+    }
+  }
+  
+  // Default to monthly (30 days) if no match found
+  return 30;
+};
+
+// Enhanced helper function to calculate next heartworm medication date
+export const calculateNextHeartworkDate = (lastDate: Date, medicationName?: string): Date => {
   const nextDate = new Date(lastDate);
-  nextDate.setDate(nextDate.getDate() + 30); // 30 days from last dose
+  const interval = medicationName ? getMedicationInterval(medicationName) : 30;
+  nextDate.setDate(nextDate.getDate() + interval);
   return nextDate;
 };
 
-// Common heartworm medication suggestions
+// Common heartworm medication suggestions with intervals
 export const COMMON_HEARTWORM_MEDICATIONS = [
-  'Heartgard Plus',
-  'NexGard Spectra',
-  'Simparica Trio',
-  'Bravecto Plus',
-  'Revolution Plus',
-  'Advantage Multi',
-  'Sentinel Spectrum',
+  { name: 'Heartgard Plus', interval: 30 },
+  { name: 'NexGard Spectra', interval: 30 },
+  { name: 'Simparica Trio', interval: 30 },
+  { name: 'Interceptor Plus', interval: 30 },
+  { name: 'Revolution Plus', interval: 30 },
+  { name: 'Bravecto Plus', interval: 90 },
+  { name: 'ProHeart 6', interval: 180 },
+  { name: 'ProHeart 12', interval: 365 },
 ];
+
+// Legacy export for backward compatibility
+export const COMMON_HEARTWORM_MEDICATION_NAMES = COMMON_HEARTWORM_MEDICATIONS.map(med => med.name);
 
 // Common dog medication suggestions
 export const COMMON_DOG_MEDICATIONS = [
