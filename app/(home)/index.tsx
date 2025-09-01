@@ -102,6 +102,10 @@ export default function HomePage() {
     router.push("/add-dog");
   };
 
+  const handleMapNavigation = () => {
+    router.push("/map");
+  };
+
   // Center the first card on initial load
   useEffect(() => {
     if (dogs.length > 0 && scrollViewRef.current) {
@@ -133,6 +137,9 @@ export default function HomePage() {
       <View style={styles.header}>
         <HamburgerMenu />
         <View style={styles.headerSpacer} />
+        <TouchableOpacity style={styles.mapButton} onPress={handleMapNavigation}>
+          <Ionicons name="map" size={24} color={Theme.colors.text.primary} />
+        </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={handleAddProfile}>
           <Ionicons name="add" size={24} color={Theme.colors.text.primary} />
         </TouchableOpacity>
@@ -305,6 +312,18 @@ const styles = StyleSheet.create({
   },
   headerSpacer: {
     flex: 1,
+  },
+  mapButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Theme.colors.glass.background,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Theme.colors.glass.border,
+    marginRight: 12,
+    ...Theme.shadows.glassLight,
   },
   addButton: {
     width: 40,

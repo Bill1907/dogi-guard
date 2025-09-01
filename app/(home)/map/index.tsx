@@ -1,7 +1,13 @@
 import MapContainer from "@/components/map/MapContainer";
+import { Theme } from "@/constants/Theme";
 import { useI18n } from "@/contexts/I18nContext";
 import { LocationService, UserLocation } from "@/services/LocationService";
-import { PlacesService, Place, PlacesError, PlacesErrorType } from "@/services/PlacesService";
+import {
+  Place,
+  PlacesError,
+  PlacesErrorType,
+  PlacesService,
+} from "@/services/PlacesService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -15,7 +21,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 
 export default function MapScreen() {
   const router = useRouter();
@@ -59,54 +64,42 @@ export default function MapScreen() {
         setPlaces(placesWithDistance);
       } catch (error) {
         console.error("Error searching places:", error);
-        
+
         if (error instanceof PlacesError) {
           switch (error.type) {
             case PlacesErrorType.NETWORK_ERROR:
-              Alert.alert(
-                t("map.networkError"), 
-                t("map.networkErrorMessage"),
-                [
-                  { text: t("common.cancel") },
-                  { 
-                    text: t("map.retry"), 
-                    onPress: () => searchNearbyPlaces(location)
-                  }
-                ]
-              );
+              Alert.alert(t("map.networkError"), t("map.networkErrorMessage"), [
+                { text: t("common.cancel") },
+                {
+                  text: t("map.retry"),
+                  onPress: () => searchNearbyPlaces(location),
+                },
+              ]);
               break;
             case PlacesErrorType.QUOTA_EXCEEDED:
               Alert.alert(
-                t("map.apiQuotaExceeded"), 
+                t("map.apiQuotaExceeded"),
                 t("map.apiQuotaExceededMessage")
               );
               break;
             default:
-              Alert.alert(
-                t("map.searchError"), 
-                t("map.searchErrorMessage"),
-                [
-                  { text: t("common.cancel") },
-                  { 
-                    text: t("map.retry"), 
-                    onPress: () => searchNearbyPlaces(location)
-                  }
-                ]
-              );
+              Alert.alert(t("map.searchError"), t("map.searchErrorMessage"), [
+                { text: t("common.cancel") },
+                {
+                  text: t("map.retry"),
+                  onPress: () => searchNearbyPlaces(location),
+                },
+              ]);
               break;
           }
         } else {
-          Alert.alert(
-            t("map.searchError"), 
-            t("map.searchErrorMessage"),
-            [
-              { text: t("common.cancel") },
-              { 
-                text: t("map.retry"), 
-                onPress: () => searchNearbyPlaces(location)
-              }
-            ]
-          );
+          Alert.alert(t("map.searchError"), t("map.searchErrorMessage"), [
+            { text: t("common.cancel") },
+            {
+              text: t("map.retry"),
+              onPress: () => searchNearbyPlaces(location),
+            },
+          ]);
         }
       } finally {
         setLoading(false);
@@ -186,6 +179,21 @@ export default function MapScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["left", "right"]}>
+      {/* Header */}
+      {/* <View style={styles.header}>
+        <View style={styles.headerSpacer} />
+        <TouchableOpacity
+          style={styles.refreshButton}
+          onPress={getUserLocation}
+        >
+          <Ionicons
+            name="refresh"
+            size={24}
+            color={Theme.colors.primary.main}
+          />
+        </TouchableOpacity>
+      </View> */}
+
       <View style={styles.mapContainer}>
         <MapContainer
           showUserLocation
@@ -206,58 +214,67 @@ export default function MapScreen() {
 
         {/* Search Type Selector */}
         <View style={styles.searchTypeContainer}>
+          {/* Back Button */}
           <TouchableOpacity
-            style={[
-              styles.searchTypeButton,
-              searchType === "veterinary" && styles.searchTypeButtonActive,
-            ]}
-            onPress={() => handleSearchTypeChange("veterinary")}
+            style={styles.backButton}
+            onPress={() => router.back()}
+            accessibilityLabel={t("common.back")}
+            accessibilityRole="button"
           >
             <Ionicons
-              name="medkit"
-              size={20}
-              color={searchType === "veterinary" ? "#fff" : "#666"}
+              name="chevron-back"
+              size={24}
+              color={Theme.colors.text.primary}
             />
-            <Text
-              style={[
-                styles.searchTypeText,
-                searchType === "veterinary" && styles.searchTypeTextActive,
-              ]}
-            >
-              {t("map.veterinary")}
-            </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.searchTypeButton,
-              searchType === "pharmacy" && styles.searchTypeButtonActive,
-            ]}
-            onPress={() => handleSearchTypeChange("pharmacy")}
-          >
-            <Ionicons
-              name="medical"
-              size={20}
-              color={searchType === "pharmacy" ? "#fff" : "#666"}
-            />
-            <Text
+          {/* Search Type Buttons Container */}
+          <View style={styles.searchTypeButtonsContainer}>
+            <TouchableOpacity
               style={[
-                styles.searchTypeText,
-                searchType === "pharmacy" && styles.searchTypeTextActive,
+                styles.searchTypeButton,
+                searchType === "veterinary" && styles.searchTypeButtonActive,
               ]}
+              onPress={() => handleSearchTypeChange("veterinary")}
             >
-              {t("map.pharmacy")}
-            </Text>
-          </TouchableOpacity>
+              <Ionicons
+                name="medkit"
+                size={20}
+                color={searchType === "veterinary" ? "#fff" : "#666"}
+              />
+              <Text
+                style={[
+                  styles.searchTypeText,
+                  searchType === "veterinary" && styles.searchTypeTextActive,
+                ]}
+              >
+                {t("map.veterinary")}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.searchTypeButton,
+                searchType === "pharmacy" && styles.searchTypeButtonActive,
+              ]}
+              onPress={() => handleSearchTypeChange("pharmacy")}
+            >
+              <Ionicons
+                name="medical"
+                size={20}
+                color={searchType === "pharmacy" ? "#fff" : "#666"}
+              />
+              <Text
+                style={[
+                  styles.searchTypeText,
+                  searchType === "pharmacy" && styles.searchTypeTextActive,
+                ]}
+              >
+                {t("map.pharmacy")}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-
-        {/* Refresh Button */}
-        <TouchableOpacity
-          style={styles.refreshButton}
-          onPress={getUserLocation}
-        >
-          <Ionicons name="refresh" size={24} color="#007AFF" />
-        </TouchableOpacity>
       </View>
 
       {/* Bottom Sheet with Places List */}
@@ -274,6 +291,16 @@ export default function MapScreen() {
           <Text style={styles.bottomSheetTitle}>
             {t("map.nearbyPlaces")} ({places.length})
           </Text>
+          <TouchableOpacity
+            style={styles.refreshButton}
+            onPress={getUserLocation}
+          >
+            <Ionicons
+              name="refresh"
+              size={24}
+              color={Theme.colors.primary.main}
+            />
+          </TouchableOpacity>
         </View>
 
         {loading ? (
@@ -328,99 +355,127 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Theme.colors.background.primary,
   },
   mapContainer: {
     flex: 1,
     position: "relative",
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: Theme.spacing.lg,
+    paddingVertical: Theme.spacing.md,
+    backgroundColor: "transparent",
+  },
+  headerSpacer: {
+    flex: 1,
+  },
   searchTypeContainer: {
     position: "absolute",
-    top: 20,
-    left: 20,
-    right: 20,
+    top: 60,
+    left: 10,
+    right: 10,
     flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: 25,
+    alignItems: "center",
+    backgroundColor: Theme.colors.glass.backgroundDark,
+    borderRadius: Theme.borderRadius.xxl,
     padding: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: Theme.colors.glass.border,
+    ...Theme.shadows.glass,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Theme.colors.glass.background,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: Theme.colors.glass.border,
+    ...Theme.shadows.glassLight,
+  },
+  searchTypeButtonsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    backgroundColor: Theme.colors.glass.backgroundDark,
+    borderRadius: Theme.borderRadius.xxl,
+    padding: 4,
   },
   searchTypeButton: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 20,
+    paddingVertical: Theme.spacing.md,
+    paddingHorizontal: Theme.spacing.lg,
+    borderRadius: Theme.borderRadius.xl,
   },
   searchTypeButtonActive: {
-    backgroundColor: "#007AFF",
+    backgroundColor: Theme.colors.primary.main,
+    ...Theme.shadows.glassLight,
   },
   searchTypeText: {
-    marginLeft: 8,
+    marginLeft: Theme.spacing.sm,
     fontSize: 14,
     fontWeight: "600",
-    color: "#666",
+    color: Theme.colors.text.secondary,
   },
   searchTypeTextActive: {
-    color: "#fff",
+    color: Theme.colors.text.white,
   },
   refreshButton: {
-    position: "absolute",
-    top: 80,
-    right: 20,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#fff",
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Theme.colors.glass.background,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
+    borderWidth: 1,
+    borderColor: Theme.colors.glass.border,
+    ...Theme.shadows.glassLight,
   },
   bottomSheet: {
-    backgroundColor: "#fff",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: Theme.colors.glass.backgroundDark,
+    borderTopLeftRadius: Theme.borderRadius.xl,
+    borderTopRightRadius: Theme.borderRadius.xl,
     height: 300,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 10,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderColor: Theme.colors.glass.border,
+    ...Theme.shadows.glassHeavy,
   },
   bottomSheetHeader: {
-    padding: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: Theme.spacing.xl,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: Theme.colors.glass.border,
   },
   bottomSheetTitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
+    color: Theme.colors.text.primary,
   },
   apiKeyWarning: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    backgroundColor: "#FFF3CD",
+    paddingHorizontal: Theme.spacing.xl,
+    paddingVertical: Theme.spacing.md,
+    backgroundColor: Theme.colors.status.warning,
     borderBottomWidth: 1,
-    borderBottomColor: "#FFE69C",
+    borderBottomColor: Theme.colors.glass.border,
   },
   apiKeyWarningText: {
     flex: 1,
-    marginLeft: 8,
+    marginLeft: Theme.spacing.sm,
     fontSize: 13,
-    color: "#856404",
+    color: Theme.colors.text.primary,
     lineHeight: 18,
   },
   loadingContainer: {
@@ -430,22 +485,24 @@ const styles = StyleSheet.create({
   },
   placesList: {
     flex: 1,
-    padding: 20,
+    padding: Theme.spacing.xl,
   },
   placeCard: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: "#f8f8f8",
-    borderRadius: 12,
+    padding: Theme.spacing.lg,
+    marginBottom: Theme.spacing.md,
+    backgroundColor: Theme.colors.glass.background,
+    borderRadius: Theme.borderRadius.medium,
     borderWidth: 1,
-    borderColor: "transparent",
+    borderColor: Theme.colors.glass.border,
+    ...Theme.shadows.glassLight,
   },
   placeCardSelected: {
-    borderColor: "#007AFF",
-    backgroundColor: "#f0f8ff",
+    borderColor: Theme.colors.primary.main,
+    backgroundColor: Theme.colors.primary.transparent,
+    ...Theme.shadows.glass,
   },
   placeInfo: {
     flex: 1,
@@ -458,12 +515,12 @@ const styles = StyleSheet.create({
   placeName: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#333",
-    marginLeft: 8,
+    color: Theme.colors.text.primary,
+    marginLeft: Theme.spacing.sm,
   },
   placeAddress: {
     fontSize: 14,
-    color: "#666",
+    color: Theme.colors.text.secondary,
     marginBottom: 5,
   },
   placeDetails: {
@@ -472,12 +529,12 @@ const styles = StyleSheet.create({
   },
   placeDistance: {
     fontSize: 13,
-    color: "#007AFF",
+    color: Theme.colors.primary.main,
     fontWeight: "500",
   },
   placeHours: {
     fontSize: 13,
-    color: "#999",
-    marginLeft: 10,
+    color: Theme.colors.text.light,
+    marginLeft: Theme.spacing.md,
   },
 });
