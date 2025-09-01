@@ -1,10 +1,12 @@
 import { DogProvider } from "@/contexts/DogContext";
+import { I18nProvider } from "@/contexts/I18nContext";
 import { Stack } from "expo-router/stack";
 
 export default function HomeLayout() {
   return (
-    <DogProvider>
-      <Stack
+    <I18nProvider>
+      <DogProvider>
+        <Stack
         screenOptions={{
           headerStyle: {
             backgroundColor: "#f8f9fa",
@@ -46,7 +48,14 @@ export default function HomeLayout() {
             presentation: "modal",
           }}
         />
-      </Stack>
-    </DogProvider>
+        <Stack.Screen
+          name="map"
+          options={{
+            headerShown: false,
+          }}
+        />
+        </Stack>
+      </DogProvider>
+    </I18nProvider>
   );
 }

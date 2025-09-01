@@ -48,12 +48,18 @@ export const validateEnvironmentVariables = (): EnvValidationResult => {
     }
   }
 
+  // Optional Google Places API key (for map features)
+  if (!process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY) {
+    warnings.push('EXPO_PUBLIC_GOOGLE_PLACES_API_KEY is not configured. Map search features will use mock data.');
+  }
+
   // Provide suggestions for missing variables
   if (missingVars.length > 0) {
     suggestions.push('1. Create a .env file in your project root if it doesn\'t exist');
     suggestions.push('2. Copy .env.example to .env and fill in your actual values');
     suggestions.push('3. Get Supabase keys from: https://app.supabase.com');
-    suggestions.push('4. Restart your development server after adding environment variables');
+    suggestions.push('4. Get Google Places API key from: https://console.cloud.google.com');
+    suggestions.push('5. Restart your development server after adding environment variables');
   }
 
   return {

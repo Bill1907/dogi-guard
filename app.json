@@ -9,15 +9,24 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "$GOOGLE_MAPS_API_KEY"
+      },
+      "bundleIdentifier": "com.boseongkim.dogiguard"
     },
     "android": {
+      "googleMapsApiKey": "$GOOGLE_MAPS_API_KEY",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/playstore.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.boseongkim.dogiguard"
+      "package": "com.boseongkim.dogiguard",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -36,7 +45,22 @@
         }
       ],
       "expo-secure-store",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "DogiGuard needs access to your location to find nearby veterinary hospitals and pharmacies."
+        }
+      ],
+      [
+        "expo-maps",
+        {
+          "apiKey": {
+            "android": "$GOOGLE_MAPS_API_KEY",
+            "ios": "$GOOGLE_MAPS_API_KEY"
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

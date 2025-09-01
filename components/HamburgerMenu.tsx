@@ -30,6 +30,16 @@ export const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ onMenuPress }) => 
 
   const menuItems = [
     {
+      id: "map",
+      title: t("menu.map"),
+      icon: "map-outline" as const,
+      onPress: () => {
+        closeMenu(() => {
+          router.push("/(home)/map");
+        });
+      },
+    },
+    {
       id: "profile",
       title: t("menu.profile"),
       icon: "person-outline" as const,
