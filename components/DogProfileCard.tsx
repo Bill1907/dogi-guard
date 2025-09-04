@@ -65,10 +65,6 @@ const FrontSide: React.FC<CardSideProps> = ({
 }) => {
   const { t } = useTranslation();
   
-  // Simple image error handler
-  const handleImageError = (error?: any) => {
-    console.log("DogProfileCard: Image failed to load for:", dog.name, error);
-  };
 
   return (
     <>
@@ -78,7 +74,6 @@ const FrontSide: React.FC<CardSideProps> = ({
           source={{ uri: dog.photo }}
           style={styles.backgroundImage}
           contentFit="cover"
-          onError={handleImageError}
           cachePolicy="memory-disk"
           transition={200}
         />
@@ -411,10 +406,6 @@ export const DogProfileCard: React.FC<DogProfileCardProps> = ({
     }
   };
 
-  // Simple image error handler
-  const handleImageError = (error?: any) => {
-    console.log("DogProfileCard: Image failed to load for:", dog.name, error);
-  };
 
   // Calculate card transform and style for book-page turning effect
   const getCardStyle = () => {

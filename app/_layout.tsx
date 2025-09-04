@@ -8,15 +8,21 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import * as Linking from "expo-linking";
 import { storeEmailConfirmationData } from "@/utils/emailConfirmationHandler";
+import ErrorBoundary from "@/components/ErrorBoundary";
+import { setGlobalErrorHandler } from "@/utils/errorHandler";
+import { initSentry } from "@/utils/sentry";
 
 // Validate environment configuration on app startup
 logEnvironmentValidation();
+
+// Initialize crash reporting and error handling
+initSentry();
+setGlobalErrorHandler();
 
 export default function RootLayout() {
   useEffect(() => {
     // Handle deep link when app is already running
     const handleDeepLink = (url: string) => {
-      console.log('Deep link received:', url);
       handleAuthLink(url);
     };
 
@@ -28,7 +34,6 @@ export default function RootLayout() {
     // Check for initial URL when app is opened from deep link
     Linking.getInitialURL().then((url) => {
       if (url) {
-        console.log('Initial URL:', url);
         handleAuthLink(url);
       }
     });
@@ -41,7 +46,7 @@ export default function RootLayout() {
   const handleAuthLink = async (url: string) => {
     try {
       const parsed = Linking.parse(url);
-      console.log('Parsed URL:', parsed);
+      // Parse URL for authentication handling
 
       if (parsed.hostname === 'email-confirm') {
         // Extract confirmation data from URL
@@ -56,10 +61,10 @@ export default function RootLayout() {
           error_description as string
         );
         
-        console.log('Email confirmation data stored for processing');
+        // Email confirmation data stored for processing
       } else if (parsed.hostname === 'reset-password') {
         // Handle password reset - already implemented
-        console.log('Password reset deep link handled');
+        // Password reset deep link handled
       }
     } catch (error) {
       console.error('Error handling deep link:', error);
@@ -67,19 +72,21 @@ export default function RootLayout() {
   };
 
   return (
-    <SafeAreaProvider>
-      <StatusBar style="auto" translucent={true} />
-      <AuthProvider>
-        <I18nProvider>
-          <ToastProvider>
-            <Stack
-              screenOptions={{
-                headerShown: false,
-              }}
-            />
-          </ToastProvider>
-        </I18nProvider>
-      </AuthProvider>
-    </SafeAreaProvider>
+    <ErrorBoundary>
+      <SafeAreaProvider>
+        <StatusBar style="auto" translucent={true} />
+        <AuthProvider>
+          <I18nProvider>
+            <ToastProvider>
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                }}
+              />
+            </ToastProvider>
+          </I18nProvider>
+        </AuthProvider>
+      </SafeAreaProvider>
+    </ErrorBoundary>
   );
 }

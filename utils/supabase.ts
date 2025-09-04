@@ -11,8 +11,29 @@ const supabaseKey =
 // Don't throw immediately - allow the app to start and show a meaningful error
 const isConfigured = supabaseUrl && supabaseKey;
 
+// Create a dummy/mock client that won't crash when methods are called
+const createDummySupabaseClient = () => ({
+  auth: {
+    getSession: async () => ({ data: { session: null }, error: new Error('Supabase not configured') }),
+    onAuthStateChange: (callback: any) => ({
+      data: { subscription: { unsubscribe: () => {} } }
+    }),
+    signUp: async () => ({ data: { user: null }, error: new Error('Supabase not configured') }),
+    signInWithPassword: async () => ({ data: { user: null }, error: new Error('Supabase not configured') }),
+    signOut: async () => ({ error: new Error('Supabase not configured') }),
+    resetPasswordForEmail: async () => ({ error: new Error('Supabase not configured') }),
+    resend: async () => ({ error: new Error('Supabase not configured') })
+  },
+  from: () => ({
+    select: () => ({ data: [], error: new Error('Supabase not configured') }),
+    insert: () => ({ data: null, error: new Error('Supabase not configured') }),
+    update: () => ({ data: null, error: new Error('Supabase not configured') }),
+    delete: () => ({ data: null, error: new Error('Supabase not configured') })
+  })
+});
+
 // Default Supabase client for non-authenticated operations
-// Create a dummy client if not configured to prevent app crash
+// Create a working client if configured, otherwise create dummy client to prevent crashes
 export const supabase = isConfigured
   ? createClient(supabaseUrl!, supabaseKey!, {
       auth: {
@@ -22,7 +43,7 @@ export const supabase = isConfigured
         detectSessionInUrl: false,
       },
     })
-  : (null as any); // Temporary null client until configured
+  : createDummySupabaseClient(); // Dummy client that won't crash
 
 /**
  * Creates a basic Supabase client for general use

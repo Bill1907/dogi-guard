@@ -32,15 +32,29 @@ export const useSupabaseAuth = (): AuthState & AuthActions => {
     // Get initial session
     const getInitialSession = async () => {
       try {
+        // Check if Supabase is properly configured
+        if (!supabase || typeof supabase.auth?.getSession !== 'function') {
+          console.error('Supabase is not properly configured - check environment variables');
+          setSession(null);
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+
         const { data: { session }, error } = await supabase.auth.getSession();
         if (error) {
           console.error('Error getting session:', error);
+          if (error.message === 'Supabase not configured') {
+            console.error('❌ Supabase configuration error - environment variables missing');
+          }
         } else {
           setSession(session);
           setUser(session?.user ?? null);
         }
       } catch (error) {
         console.error('Error in getInitialSession:', error);
+        setSession(null);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -48,18 +62,31 @@ export const useSupabaseAuth = (): AuthState & AuthActions => {
 
     getInitialSession();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.id);
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
+    // Listen for auth changes - only if Supabase is configured
+    let subscription: any = null;
+    
+    try {
+      if (supabase && typeof supabase.auth?.onAuthStateChange === 'function') {
+        const { data: { subscription: sub } } = supabase.auth.onAuthStateChange(
+          async (event, session) => {
+            console.log('Auth state changed:', event, session?.user?.id);
+            setSession(session);
+            setUser(session?.user ?? null);
+            setLoading(false);
+          }
+        );
+        subscription = sub;
       }
-    );
+    } catch (error) {
+      console.error('Error setting up auth state listener:', error);
+    }
 
     return () => {
-      subscription.unsubscribe();
+      try {
+        subscription?.unsubscribe?.();
+      } catch (error) {
+        console.error('Error unsubscribing from auth changes:', error);
+      }
     };
   }, []);
 

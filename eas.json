@@ -6,22 +6,40 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "$EXPO_PUBLIC_SUPABASE_URL",
+        "EXPO_PUBLIC_SUPABASE_KEY": "$EXPO_PUBLIC_SUPABASE_KEY",
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "$EXPO_PUBLIC_GOOGLE_PLACES_API_KEY",
+        "GOOGLE_MAPS_API_KEY": "$GOOGLE_MAPS_API_KEY",
+        "EXPO_PUBLIC_SENTRY_DSN": "$EXPO_PUBLIC_SENTRY_DSN"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "$EXPO_PUBLIC_SUPABASE_URL",
+        "EXPO_PUBLIC_SUPABASE_KEY": "$EXPO_PUBLIC_SUPABASE_KEY",
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "$EXPO_PUBLIC_GOOGLE_PLACES_API_KEY",
+        "GOOGLE_MAPS_API_KEY": "$GOOGLE_MAPS_API_KEY",
+        "EXPO_PUBLIC_SENTRY_DSN": "$EXPO_PUBLIC_SENTRY_DSN"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_SUPABASE_URL": "$EXPO_PUBLIC_SUPABASE_URL",
+        "EXPO_PUBLIC_SUPABASE_KEY": "$EXPO_PUBLIC_SUPABASE_KEY",
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "$EXPO_PUBLIC_GOOGLE_PLACES_API_KEY",
+        "GOOGLE_MAPS_API_KEY": "$GOOGLE_MAPS_API_KEY",
+        "EXPO_PUBLIC_SENTRY_DSN": "$EXPO_PUBLIC_SENTRY_DSN"
+      }
     }
   },
   "submit": {
     "production": {
-      "android": {
-        "buildType": "apk"
-      },
       "ios": {
-        "bundleIdentifier": "com.dogiguard.app",
+        "bundleIdentifier": "com.boseongkim.dogiguard",
         "ascAppId": "6751488574"
       }
     }

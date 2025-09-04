@@ -105,3 +105,39 @@ export const logEnvironmentValidation = (): void => {
 export const isAppConfigured = (): boolean => {
   return validateEnvironmentVariables().isValid;
 };
+
+/**
+ * Get user-friendly error message for missing environment configuration
+ */
+export const getConfigurationErrorMessage = (language: 'ko' | 'en' = 'ko'): { title: string; message: string; action: string } => {
+  const result = validateEnvironmentVariables();
+  
+  if (result.isValid) {
+    return language === 'ko' 
+      ? { title: '설정 완료', message: '앱이 정상적으로 구성되었습니다.', action: '계속하기' }
+      : { title: 'Configuration Complete', message: 'App is properly configured.', action: 'Continue' };
+  }
+
+  if (language === 'ko') {
+    return {
+      title: '앱 설정 오류',
+      message: `앱을 실행하려면 다음 설정이 필요합니다:\n\n${result.missingVars.map(v => `• ${v}`).join('\n')}\n\n개발자에게 문의하거나 앱을 업데이트해 주세요.`,
+      action: '앱 업데이트 확인'
+    };
+  } else {
+    return {
+      title: 'App Configuration Error',
+      message: `The following configuration is required to run the app:\n\n${result.missingVars.map(v => `• ${v}`).join('\n')}\n\nPlease contact the developer or update the app.`,
+      action: 'Check for App Update'
+    };
+  }
+};
+
+/**
+ * Display configuration error in user-friendly format
+ */
+export const showConfigurationError = (language: 'ko' | 'en' = 'ko'): void => {
+  const error = getConfigurationErrorMessage(language);
+  console.error(`❌ ${error.title}`);
+  console.error(error.message);
+};
